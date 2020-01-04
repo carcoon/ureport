@@ -1,0 +1,15 @@
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg" class="icon">
+ <defs>
+  <style type="text/css"/>
+ </defs>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_1" fill="#81af08" d="m0,914.944l577.024,109.056l0,-1024l-577.024,109.056l0,805.888zm145.408,-623.104l92.16,0l65.536,119.808l67.584,-119.808l89.088,0l-112.64,177.664l119.808,190.976l-93.696,0l-70.144,-125.44l-73.728,125.44l-89.6,0l118.272,-187.904l-112.64,-180.736zm480.256,-158.72l0,67.072l309.76,0l0,43.008l-309.76,0l0,69.632l309.76,0l0,43.008l-309.76,0l0,68.608l309.76,0l0,43.008l-309.76,0l0,68.608l309.76,0l0,43.008l-309.76,0l0,68.608l309.76,0l0,43.008l-309.76,0l0,68.096l309.76,0l0,43.008l-309.76,0l0,89.088l398.336,0l0,-757.76l-398.336,0z"/>
+  <text stroke="null" transform="matrix(13.45888902926337,0,0,7.240925857353796,-3264.4259983039515,-4934.930876888903) " xml:space="preserve" text-anchor="start" font-family="'Times New Roman', Times, serif" font-size="24" id="svg_3" y="804" x="252.810599" stroke-opacity="null" stroke-width="0" fill="#0000ff">97</text>
+  <text stroke="null" transform="matrix(13.45888902926337,0,0,7.240925857353796,-3264.4259983039515,-4934.930876888903) " xml:space="preserve" text-anchor="start" font-family="'Times New Roman', Times, serif" font-size="24" id="svg_4" y="804" x="252.810599" stroke-opacity="null" stroke-width="0" fill="#0000ff">97</text>
+ </g>
+</svg>

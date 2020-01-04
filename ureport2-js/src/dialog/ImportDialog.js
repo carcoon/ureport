@@ -33,7 +33,9 @@ export default class ImportDialog{
         form.append(`<div style="margin-bottom: 10px;line-height: 2;color: #929191;">${window.i18n.dialog.import.desc}</div>`);
         const fileGroup=$(`<div class="form-group"><label>${window.i18n.dialog.import.file}</label></div>`);
         form.append(fileGroup);
-        const file=$(`<input name="_excel_file" class="form-control" type="file">`);
+        //.ureport.xml, .xlsx, .xls, .csv
+        //.ureport.xml, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        const file=$(`<input name="_excel_file" class="form-control" type="file" accept=".ureport.xml, .xlsx, .xls">`);
         fileGroup.append(file);
         const buttonGroup=$(`<div class="form-group"></div>`);
         const submit=$(`<button type="submit" class="btn btn-primary">${window.i18n.dialog.import.upload}</button>`);
