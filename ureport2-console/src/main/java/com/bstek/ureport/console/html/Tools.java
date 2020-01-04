@@ -29,6 +29,9 @@ public class Tools {
 	private boolean print=true;
 	private boolean pdfPrint=true;
 	private boolean pdfPreviewPrint=true;
+	private boolean excel97=true;
+	private boolean pagingExcel97=true;
+	private boolean sheetPagingExcel97=true;
 	private boolean paging=true;
 	public Tools(boolean init) {
 		if(init){
@@ -41,6 +44,9 @@ public class Tools {
 			pdfPrint=true;
 			pdfPreviewPrint=true;
 			paging=true;
+			excel97=true;
+			pagingExcel97=true;
+			sheetPagingExcel97=true;
 		}else{
 			word=false;
 			excel=false;
@@ -51,6 +57,9 @@ public class Tools {
 			pdfPrint=false;
 			pdfPreviewPrint=false;
 			paging=false;
+			excel97=false;
+			pagingExcel97=false;
+			sheetPagingExcel97=false;
 		}
 	}
 	public void doInit(String name){
@@ -72,7 +81,14 @@ public class Tools {
 			pagingExcel=true;
 		}else if(name.equals("8")){
 			sheetPagingExcel=true;
+		}else if(name.equals("10")){
+			excel97=true;
+		}else if(name.equals("11")){
+			pagingExcel97=true;
+		}else if(name.equals("12")){
+			sheetPagingExcel97=true;
 		}
+
 	}
 	public boolean isShow() {
 		return show;
@@ -110,6 +126,31 @@ public class Tools {
 	public void setSheetPagingExcel(boolean sheetPagingExcel) {
 		this.sheetPagingExcel = sheetPagingExcel;
 	}
+
+	public boolean isExcel97() {
+		return excel97;
+	}
+
+	public void setExcel97(boolean excel97) {
+		this.excel97 = excel97;
+	}
+
+	public boolean isPagingExcel97() {
+		return pagingExcel97;
+	}
+
+	public void setPagingExcel97(boolean pagingExcel97) {
+		this.pagingExcel97 = pagingExcel97;
+	}
+
+	public boolean isSheetPagingExcel97() {
+		return sheetPagingExcel97;
+	}
+
+	public void setSheetPagingExcel97(boolean sheetPagingExcel97) {
+		this.sheetPagingExcel97 = sheetPagingExcel97;
+	}
+
 	public boolean isPrint() {
 		return print;
 	}

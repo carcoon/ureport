@@ -33,25 +33,43 @@ public class SelectInputComponent extends InputComponent {
 	private String labelField;
 	private String valueField;
 	private List<Option> options;
+	// 添加全部
+	private boolean useAll;
+	// 自动提交
+	private boolean useAutoPost;
 	@Override
 	String inputHtml(RenderContext context) {
 		String name=getBindParameter();
 		Object pvalue=context.getParameter(name)==null ? "" : context.getParameter(name);
 		StringBuilder sb=new StringBuilder();
-		sb.append("<select style=\"padding:3px;height:28px\" id='"+context.buildComponentId(this)+"' name='"+name+"' class='form-control'>");
+		sb.append("<select style=\"padding:3px;height:28px\" id='"+context.buildComponentId(this)+"' name='"+name+"' ");
+		if(useAutoPost){
+			sb.append(" onchange=\"reloadReport();\" ");
+		}
+		sb.append(" class='form-control'>");
 		if(useDataset && StringUtils.isNotBlank(dataset)){
 			Dataset ds=context.getDataset(dataset);
 			if(ds==null){
 				throw new DatasetUndefinitionException(dataset);
 			}
+			if(useAll){
+				if(pvalue.equals("")){
+					sb.append("<option value='' selected>全部</option>");
+				}else{
+					sb.append("<option value='' >全部</option>");
+				}
+			}
 			for(Object obj:ds.getData()){
 				Object label=Utils.getProperty(obj, labelField);
 				Object value=Utils.getProperty(obj, valueField);
-				String selected=value.equals(pvalue) ? "selected" : "";
+				boolean sameValue=value.equals(pvalue) || pvalue.toString().equals(value.toString());
+				String selected=sameValue ? "selected" : "";
 				sb.append("<option value='"+value+"' "+selected+">"+label+"</option>");		
 			}
-			if(pvalue.equals("")){
-				sb.append("<option value='' selected></option>");
+			if(!useAll){
+				if(pvalue.equals("")){
+					sb.append("<option value='' selected></option>");
+				}
 			}
 		}else{
 			for(Option option:options){
@@ -113,5 +131,21 @@ public class SelectInputComponent extends InputComponent {
 	}
 	public List<Option> getOptions() {
 		return options;
+	}
+
+	public boolean isUseAll() {
+		return useAll;
+	}
+
+	public void setUseAll(boolean useAll) {
+		this.useAll = useAll;
+	}
+
+	public boolean isUseAutoPost() {
+		return useAutoPost;
+	}
+
+	public void setUseAutoPost(boolean useAutoPost) {
+		this.useAutoPost = useAutoPost;
 	}
 }

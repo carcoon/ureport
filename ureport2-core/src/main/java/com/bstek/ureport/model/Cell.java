@@ -98,6 +98,8 @@ public class Cell implements ReportCell {
 	private boolean forPaging;
 	private String linkUrl;
 	private String linkTargetWindow;
+	private String iframeW;
+	private String iframeH;
 	private List<LinkParameter> linkParameters;
 	
 	private Map<String,String> linkParameterMap;
@@ -194,6 +196,8 @@ public class Cell implements ReportCell {
 		cell.setDuplicateRange(duplicateRange);
 		cell.setLinkParameters(linkParameters);
 		cell.setLinkTargetWindow(linkTargetWindow);
+		cell.setIframeW(iframeW);
+		cell.setIframeH(iframeH);
 		cell.setLinkUrl(linkUrl);
 		cell.setPageRowSpan(pageRowSpan);
 		cell.setConditionPropertyItems(conditionPropertyItems);
@@ -343,6 +347,7 @@ public class Cell implements ReportCell {
 			}
 			if(StringUtils.isNotBlank(item.getNewValue())){
 				this.data=item.getNewValue();
+				this.formatData=item.getNewValue();
 			}
 			if(StringUtils.isNotBlank(item.getLinkUrl())){
 				linkUrl=item.getLinkUrl();
@@ -595,7 +600,7 @@ public class Cell implements ReportCell {
 			lineHeight=cellStyle.getLineHeight();
 		}
 		fontSize=fontSize*lineHeight;
-		int singleLineHeight=UnitUtils.pointToPixel(fontSize);//fontMetrics.getHeight();
+		int singleLineHeight=UnitUtils.pointToPixel(fontSize)-2;//fontMetrics.getHeight();
 		if(textWidth<=totalColumnWidth){
 			return;
 		}
@@ -895,6 +900,21 @@ public class Cell implements ReportCell {
 
 	public void setLinkParameters(List<LinkParameter> linkParameters) {
 		this.linkParameters = linkParameters;
+	}
+	public String getIframeW() {
+		return iframeW;
+	}
+
+	public void setIframeW(String iframeW) {
+		this.iframeW = iframeW;
+	}
+
+	public String getIframeH() {
+		return iframeH;
+	}
+
+	public void setIframeH(String iframeH) {
+		this.iframeH = iframeH;
 	}
 	
 	public String buildLinkParameters(Context context){

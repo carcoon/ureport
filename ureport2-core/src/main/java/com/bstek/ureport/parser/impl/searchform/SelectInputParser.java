@@ -38,11 +38,21 @@ public class SelectInputParser implements FormParser<SelectInputComponent> {
 		select.setType(element.attributeValue("type"));
 		select.setLabelPosition(LabelPosition.valueOf(element.attributeValue("label-position")));
 		String useDataset=element.attributeValue("use-dataset");
+		String useAll = element.attributeValue("use-all");
+		String useAutoPost = element.attributeValue("use-autopost");
 		if(StringUtils.isNotBlank(useDataset)){
 			select.setUseDataset(Boolean.valueOf(useDataset));
 			select.setDataset(element.attributeValue("dataset"));
 			select.setLabelField(element.attributeValue("label-field"));
 			select.setValueField(element.attributeValue("value-field"));
+		}
+		select.setUseAll(false);
+		select.setUseAutoPost(false);
+		if(StringUtils.isNotBlank(useAll)) {
+			select.setUseAll(Boolean.valueOf(useAll));
+		}
+		if(StringUtils.isNotBlank(useAutoPost)) {
+			select.setUseAutoPost(Boolean.valueOf(useAutoPost));
 		}
 		List<Option> options=new ArrayList<Option>();
 		for(Object obj:element.elements()){

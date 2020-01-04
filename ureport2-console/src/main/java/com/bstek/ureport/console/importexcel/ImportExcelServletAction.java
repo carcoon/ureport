@@ -42,9 +42,11 @@ import com.bstek.ureport.definition.ReportDefinition;
  */
 public class ImportExcelServletAction extends RenderPageServletAction {
 	private List<ExcelParser> excelParsers=new ArrayList<ExcelParser>();
+	private UReportFileParser uReportFileParser = new UReportFileParser();
 	public ImportExcelServletAction(){
 		excelParsers.add(new HSSFExcelParser());
 		excelParsers.add(new XSSFExcelParser());
+//		excelParsers.add(new UReportFileParser());
 	}
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,8 +71,12 @@ public class ImportExcelServletAction extends RenderPageServletAction {
 					inputStream.close();
 					break;
 				}
+				else if(name.endsWith(".ureport.xml")){
+					InputStream inputStream=item.getInputStream();
+					report=uReportFileParser.parse(inputStream);
+				}
 			}
-			errorInfo="请选择一个合法的Excel导入";
+			errorInfo="请选择一个合法的Excel或ureport文件导入";
 		} catch (Exception e) {
 			e.printStackTrace();
 			errorInfo=e.getMessage();

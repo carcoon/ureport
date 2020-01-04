@@ -41,10 +41,14 @@ public class CellDefinition implements Serializable{
 	private int colSpan;
 	private String name;
 	private Value value;
+
 	private CellStyle cellStyle=new CellStyle();
 	
 	private String linkUrl;
 	private String linkTargetWindow;
+	private String iframeW;
+	private String iframeH;
+
 	private List<LinkParameter> linkParameters;
 	
 	@JsonIgnore
@@ -112,6 +116,8 @@ public class CellDefinition implements Serializable{
 		cell.setDuplicateRange(duplicateRange);
 		cell.setLinkParameters(linkParameters);
 		cell.setLinkTargetWindow(linkTargetWindow);
+		cell.setIframeW(iframeW);		
+		cell.setIframeH(iframeH);		
 		cell.setLinkUrl(linkUrl);
 		cell.setConditionPropertyItems(conditionPropertyItems);
 		cell.setFillBlankRows(fillBlankRows);
@@ -191,6 +197,22 @@ public class CellDefinition implements Serializable{
 	public void setTopParentCellName(String topParentCellName) {
 		this.topParentCellName = topParentCellName;
 	}
+	public String getIframeW() {
+		return iframeW;
+	}
+
+	public void setIframeW(String iframeW) {
+		this.iframeW = iframeW;
+	}
+
+	public String getIframeH() {
+		return iframeH;
+	}
+
+	public void setIframeH(String iframeH) {
+		this.iframeH = iframeH;
+	}
+
 
 	public CellDefinition getLeftParentCell() {
 		return leftParentCell;

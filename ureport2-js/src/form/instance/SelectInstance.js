@@ -14,6 +14,8 @@ export default class SelectInstance extends Instance{
         this.element.append(this.inputElement);
         this.options=[];
         this.optionNum=1;
+        this.useAll=false;
+        this.useAutoPost=false;
         for(var i=1;i<5;i++){
             this.addOption();
         }
@@ -57,6 +59,8 @@ export default class SelectInstance extends Instance{
         this.dataset=json.dataset;
         this.labelField=json.labelField;
         this.valueField=json.valueField;
+        this.useAll =json.useAll;
+        this.useAutoPost=json.useAutoPost;
     }
     toJson(){
         const json={
@@ -69,6 +73,8 @@ export default class SelectInstance extends Instance{
             dataset:this.dataset,
             labelField:this.labelField,
             valueField:this.valueField,
+            useAll:this.useAll,
+            useAutoPost:this.useAutoPost,
             options:[]
         };
         for(let option of this.options){
@@ -79,8 +85,9 @@ export default class SelectInstance extends Instance{
     toXml(){
         let xml=`<input-select label="${this.label}" type="${SelectInstance.TYPE}" label-position="${this.labelPosition || 'top'}" bind-parameter="${this.bindParameter || ''}"`;
         if(this.useDataset){
-            xml+=` use-dataset="${this.useDataset}" dataset="${this.dataset}" label-field="${this.labelField}" value-field="${this.valueField}"`;
+            xml+=` use-dataset="${this.useDataset}" dataset="${this.dataset}" label-field="${this.labelField}" value-field="${this.valueField}" use-all="${this.useAll}"`;
         }
+        xml+=` use-autopost="${this.useAutoPost}" `;
         xml+='>';
         for(let option of this.options || []){
             xml+=`<option label="${option.label}" value="${option.value}"></option>`;

@@ -174,6 +174,28 @@ export default class ChartValueEditor{
             setDirty();
         });
     }
+
+    initDataLabelsOption(container){
+        const _this=this;
+        const dataLabelsGroup=$(`<fieldset style="padding: 10px;border:solid 1px #dddddd;border-radius: 8px;margin-top:10px;margin-bottom: 15px">
+        <legend style="width: auto;margin-bottom: 1px;border-bottom:none;font-size: inherit;color: #4b4b4b;">数据标签配置</legend></fieldset>`);
+        container.append(dataLabelsGroup);
+        const displayGroup=$(`<div class="form-group" style="margin-bottom: 0"><label style="margin-bottom: 15px">${window.i18n.chart.display}</label></div>`);
+        dataLabelsGroup.append(displayGroup);
+        this.showDataLabelsRadio=$(`<label class="checkbox-inline" style="padding-left: 2px"><input type="radio" name="__show_datalabels_radio_${this.id}" value="asc">${window.i18n.chart.yes}</label>`);
+        displayGroup.append(this.showDataLabelsRadio);
+        this.showDataLabelsRadio.children('input').click(function () {
+            const dataLabels=_this.getTargetPlugin("data-labels");
+            dataLabels.display=true;
+        });
+        this.hideDataLabelsRadio=$(`<label class="checkbox-inline" style="padding-left: 2px"><input type="radio" name="__show_datalabels_radio_${this.id}" value="asc" checked>${window.i18n.chart.no}</label>`);
+        displayGroup.append(this.hideDataLabelsRadio);
+        this.hideDataLabelsRadio.children('input').click(function () {
+            const dataLabels=_this.getTargetPlugin("data-labels");
+            dataLabels.display=false;
+        });
+    }
+
     initTitleOption(container){
         const _this=this;
         const legendGroup=$(`<fieldset style="padding: 10px;border:solid 1px #dddddd;border-radius: 8px;margin-top:10px;margin-bottom: 15px">
@@ -258,6 +280,26 @@ export default class ChartValueEditor{
         });
         this.titleTextGroup.hide();
         this.titlePositionGroup.hide();
+    }
+
+    getTargetPlugin(name){
+        let plugins=this.cellDef.value.chart.plugins;
+        if(!plugins){
+            plugins=[];
+            this.cellDef.value.chart.plugins=plugins;
+        }
+        let targetPlugin=null;
+        for(let plugin of plugins){
+            if(plugin.name===name){
+                targetPlugin=plugin;
+                break;
+            }
+        }
+        if(!targetPlugin){
+            targetPlugin={name:name,display:false};
+            plugins.push(targetPlugin);
+        }
+        return targetPlugin;
     }
 
     getTargetOption(type){

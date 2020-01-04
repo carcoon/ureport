@@ -19,7 +19,7 @@ import ImageTool from './tools/ImageTool.js';
 import ChartTool from './tools/ChartTool.js';
 import CrosstabTool from './tools/CrosstabTool.js';
 import MergeTool from './tools/MergeTool.js';
-import ImportTool from './tools/ImportTool.js';
+import ImportExcelTool from './tools/ImportExcelTool.js';
 import PreviewTool from './tools/PreviewTool.js';
 import FontFamilyTool from './tools/FontFamilyTool.js';
 import FontSizeTool from './tools/FontSizeTool.js';
@@ -122,7 +122,7 @@ export default class UReportDesigner{
         this.tools.push(new PreviewTool(context));
         this.tools.push(new SaveTool(context));
         this.tools.push(new OpenTool(context));
-        this.tools.push(new ImportTool(context));
+        this.tools.push(new ImportExcelTool(context));
         this.tools.push(new RedoTool(context));
         this.tools.push(new UndoTool(context));
         this.tools.push(new MergeTool(context));

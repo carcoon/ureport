@@ -1,10 +1,9 @@
-/**
+/**报表设计页面入口
  * Created by Jacky.Gao on 2017-01-25.
  */
 import '../node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css';
 import '../node_modules/completer/dist/completer.min.css';
 import '../node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css';
-import '../node_modules/handsontable/dist/handsontable.full.min.css';
 import '../node_modules/codemirror/lib/codemirror.css';
 import '../node_modules/codemirror/addon/hint/show-hint.css';
 import '../node_modules/codemirror/addon/lint/lint.css';
@@ -18,6 +17,7 @@ import UReportDesigner from './designer.js';
 import buildLocal from  './i18n/i18n.js';
 
 $(document).ready(function(){
+    // 加载本地语言
     buildLocal();
     const designer=new UReportDesigner("container");
     let prevTop=0;

@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 import com.bstek.ureport.Utils;
 
-/**
+/**算术、计算工具类
  * @author Jacky.gao
  * @since 2017年4月25日
  */

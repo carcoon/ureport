@@ -35,13 +35,34 @@ export function showDialog(title,dialogContent,buttons,events,large){
         }
     }
 };
+export function showPopDialog(title,url,width,height){
+    let stylew='';
+    let styleh='';
+    if(width!==null && width!==''){
+        stylew='width:'+width+'pt;'
+    }
+    if(height!==null && height!==''){
+        styleh=' style=\"'+stylew+'height:'+height+'pt;\"'
+    }
+    let dialogContent=`<div ${styleh}><iframe  src=\"${url}\" style=\"width:100%;height:100%;border-width:0 \"></iframe></div>'`;
+    const dialog=buildDialog(title,dialogContent,null,null,width,height);
+    dialog.modal('show');
 
-function buildDialog(title,dialogContent,buttons,large){
+};
+function buildDialog(title,dialogContent,buttons,large,width,height){
     const className='modal-dialog'+ (large ? ' modal-lg' : '');
     let modal=$(`<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>`);
     let dialog=$(`<div class="${className}"></div>`);
+    let stylew='';
+    let styleh='';
+     if(width!==null && width!==''){
+        stylew=' style=\"width:'+(width+30)+'pt;\"'
+    }
+    if(height!==null && height!==''){
+        styleh=' style=\"height:'+(height+20)+'pt;\"'
+    }
     modal.append(dialog);
-    let content=$(`<div class="modal-content">
+    let content=$(`<div class="modal-content" ${stylew}>
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                &times;
@@ -50,7 +71,7 @@ function buildDialog(title,dialogContent,buttons,large){
                ${title}
             </h4>
          </div>
-         <div class="modal-body">
+         <div class="modal-body"  ${styleh}>
             ${typeof(dialogContent)==='string' ? dialogContent : ''}
          </div>`);
     if(typeof(dialogContent)==='object'){

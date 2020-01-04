@@ -18,6 +18,7 @@ package com.bstek.ureport.console.designer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,8 +63,10 @@ public class DesignerServletAction extends RenderPageServletAction {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String method=retriveMethod(req);
 		if(method!=null){
+			// ureport/designer/loadreport 等其他方法
 			invokeMethod(method, req, resp);
 		}else{
+			// ureport/designer 默认方法
 			VelocityContext context = new VelocityContext();
 			context.put("contextPath", req.getContextPath());
 			resp.setContentType("text/html");
@@ -125,7 +128,14 @@ public class DesignerServletAction extends RenderPageServletAction {
 		IOUtils.closeQuietly(inputStream);
 		TempObjectCache.putObject(PREVIEW_KEY, reportDef);
 	}
-	
+
+	/**
+	 * 设计模式加载报表文件
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void loadReport(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String file=req.getParameter("file");
 		if(file==null){
@@ -142,7 +152,14 @@ public class DesignerServletAction extends RenderPageServletAction {
 			writeObjectToJson(resp, new ReportDefinitionWrapper(reportDef));			
 		}
 	}
-	
+
+	/**
+	 * 删除报表
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void deleteReportFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String file=req.getParameter("file");
 		if(file==null){
@@ -160,8 +177,40 @@ public class DesignerServletAction extends RenderPageServletAction {
 		}
 		targetReportProvider.deleteReport(file);
 	}
-	
-	
+	/**
+	 * 下载报表
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void downloadReportFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String file=req.getParameter("file");
+		file=ReportUtils.decodeFileName(file);
+		String content=req.getParameter("content");
+		content=decodeContent(content);
+		String[] files=file.split(":");
+		if(files.length>1){
+			file=files[1];
+		}
+		InputStream inputStream=IOUtils.toInputStream(content,"utf-8");
+		byte[] data = IOUtils.toByteArray(inputStream);
+		IOUtils.closeQuietly(inputStream);
+		resp.reset();
+		resp.setHeader("Content-Disposition", "attachment; filename=\""+ URLEncoder.encode(file,"utf-8")+"\"");
+		resp.addHeader("Content-Length", "" + data.length);
+		resp.setContentType("application/octet-stream; charset=UTF-8");
+
+		IOUtils.write(data, resp.getOutputStream());
+		resp.flushBuffer();
+	}
+	/**
+	 * 保存报表
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void saveReportFile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String file=req.getParameter("file");
 		file=ReportUtils.decodeFileName(file);
@@ -184,7 +233,14 @@ public class DesignerServletAction extends RenderPageServletAction {
 		CacheUtils.cacheReportDefinition(file, reportDef);
 		IOUtils.closeQuietly(inputStream);
 	}
-	
+
+	/**
+	 * 加载报表存储驱动
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void loadReportProviders(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		writeObjectToJson(resp, reportProviders);
 	}

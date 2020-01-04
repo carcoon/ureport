@@ -192,8 +192,27 @@ public class HtmlProducer{
 						}						
 					}
 					String target=cell.getLinkTargetWindow();
-					if(StringUtils.isBlank(target))target="_self";
-					sb.append("<a href=\""+linkURL+"\" target=\""+target+"\">");
+
+
+					if("_iframe".equals(target)){
+						String iframeW="750";
+						String iframeH="600";
+						if(StringUtils.isNotBlank(cell.getIframeW())){
+							iframeW =cell.getIframeW();
+						}
+						if(StringUtils.isNotBlank(cell.getIframeH())){
+							iframeH =cell.getIframeH();
+						}
+						sb.append("<a href=\"javascript:showPopReportDialog('"+linkURL+"',"+iframeW+","+iframeH+");\">");
+
+					}else {
+						if(StringUtils.isBlank(target)){
+							target="_self";
+						}
+						sb.append("<a href=\""+linkURL+"\" target=\""+target+"\""+ ">");
+					}
+
+
 				}
 				Object obj=(cell.getFormatData()== null) ? "" : cell.getFormatData();
 				if(obj instanceof Image){

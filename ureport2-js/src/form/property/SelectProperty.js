@@ -107,6 +107,31 @@ export default class SelectProperty extends Property{
         }
         valueSelect.val(targetField);
         valueGroup.append(valueSelect);
+
+        const useAllGroup=$(`<div class="form-group"><label>添加全部项</label></div>`);
+        const allTrue=this.getOptionSelected(true,this.useAll);
+        const allFalse=this.getOptionSelected(false,this.useAll);
+        const useAllSelect=$(`<select class="form-control">
+            <option value="true" ${allTrue}>是</option>
+            <option value="false" ${allFalse}>否</option>
+        </select>`);
+        useAllGroup.append(useAllSelect);
+        const useAutoPostGroup=$(`<div class="form-group"><label>自动提交</label></div>`);
+        const autoPostTrue=this.getOptionSelected(true,this.useAutoPost);
+        const autoPostFalse=this.getOptionSelected(false,this.useAutoPost);
+        const useAutoPostSelect=$(`<select class="form-control">
+            <option value="true"  ${autoPostTrue}>是</option>
+            <option value="false" ${autoPostFalse}>否</option>
+        </select>`);
+        useAutoPostGroup.append(useAutoPostSelect)
+        useAllSelect.change(function(){
+            editor.useAll=$(this).val();
+        });
+        useAutoPostSelect.change(function(){
+            editor.useAutoPost=$(this).val();
+        });
+        this.datasetGroup.append(useAllGroup);
+        this.optionFormGroup.append(useAutoPostGroup);
         if(editor.useDataset){
             datasourceSelect.val('dataset');
             this.datasetGroup.show();
@@ -116,11 +141,21 @@ export default class SelectProperty extends Property{
             this.simpleOptionGroup.show();
             datasourceSelect.val('simple');
         }
+
         this.simpleOptionGroup.append($("<label>固定值选项(若显示值与实际值不同，则用“,”分隔，如“是,true”等)</label>"));
         var self=this;
         $.each(editor.options,function(index,option){
             self.addOptionEditor(option);
         });
+    }
+    getOptionSelected(v1,v2){
+        if(v1 &&v2){
+            return " selected";
+        }else if(!v1 && !v2){
+            return " selected";
+        }else {
+            return "";
+        }
     }
     addOptionEditor(option){
         var inputGroup=$("<div class='input-group'>");

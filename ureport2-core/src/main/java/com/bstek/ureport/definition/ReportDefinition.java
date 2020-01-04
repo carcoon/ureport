@@ -231,7 +231,9 @@ public class ReportDefinition implements Serializable{
 	
 	private int getColumnWidth(int columnNumber,int colSpan){
 		int width=0;
-		if(colSpan>0)colSpan--;
+		if(colSpan>0){
+			colSpan--;
+		}
 		int start=columnNumber,end=start+colSpan;
 		for(int i=start;i<=end;i++){
 			for(ColumnDefinition col:columns){

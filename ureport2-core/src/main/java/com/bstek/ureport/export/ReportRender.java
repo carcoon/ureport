@@ -104,7 +104,9 @@ public class ReportRender implements ApplicationContextAware{
 		InputStream inputStream=null;
 		for(ReportProvider provider:reportProviders){
 			if(file.startsWith(provider.getPrefix())){
+				// 只要有一个驱动匹配了，就可以退出
 				inputStream=provider.loadReport(file);
+				break;
 			}
 		}
 		if(inputStream==null){

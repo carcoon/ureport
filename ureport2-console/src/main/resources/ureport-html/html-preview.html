@@ -13,6 +13,8 @@
 </style>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/jquery.min.js"></script>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap.min.js"></script>
+ 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/Chart.bundle.min.js"></script>
+ 	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/chartjs-plugin-datalabels.min.js"></script>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/venderjs/bootstrap-datetimepicker.js"></script>
  	<script type="text/javascript" src="${contextPath}/ureport/res/ureport-asserts/js/preview.bundle.js"></script>
 </head>
@@ -59,6 +61,21 @@ ${upSearchFormHtml}
 		#if($tools.sheetPagingExcel)
 		<button type="button" class="btn btn-default ureport-export-excel-paging-sheet" style="display:inline-block;padding:0;background:#f8f8f8;border:none;margin:3px" title="分页分Sheet导出EXCEL">
 			<img src='${contextPath}/ureport/res/ureport-asserts/icons/excel-with-paging-sheet.svg' width="20px" height="20px">
+		</button>
+		#end
+		#if($tools.excel97)
+		<button type="button" class="btn btn-default ureport-export-excel97" style="display:inline-block;padding:0;background:#f8f8f8;border:none;margin:3px" title="导出EXCEL97">
+			<img src='${contextPath}/ureport/res/ureport-asserts/icons/excel97.svg' width="20px" height="20px">
+		</button>
+		#end
+		#if($tools.pagingExcel97)
+		<button type="button" class="btn btn-default ureport-export-excel97-paging" style="display:inline-block;padding:0;background:#f8f8f8;border:none;margin:3px" title="分页导出EXCEL97">
+			<img src='${contextPath}/ureport/res/ureport-asserts/icons/excel97-paging.svg' width="20px" height="20px">
+		</button>
+		#end
+		#if($tools.sheetPagingExcel97)
+		<button type="button" class="btn btn-default ureport-export-excel97-paging-sheet" style="display:inline-block;padding:0;background:#f8f8f8;border:none;margin:3px" title="分页分Sheet导出EXCEL97">
+			<img src='${contextPath}/ureport/res/ureport-asserts/icons/excel97-with-paging-sheet.svg' width="20px" height="20px">
 		</button>
 		#end
 		#if($tools.paging)
@@ -109,9 +126,8 @@ ${downSearchFormHtml}
 window._server="${contextPath}/ureport";
 window.formElements=[];
 $(document).ready(function(){
-	
+
 	buildPaging(${pageIndex},${totalPageWithCol});
-	
 	#if($intervalRefreshValue>0)
 		_intervalRefresh($intervalRefreshValue,$totalPageWithCol);
 	#end
@@ -119,7 +135,9 @@ $(document).ready(function(){
 	${searchFormJs}
 	function doSearch(){
 		submitSearchForm("${file}","${customParameters}");
+
 	}
+    hideLoading();
 });
 </script>
 </body>

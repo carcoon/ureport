@@ -3,7 +3,7 @@
   "selectMultiTargetCellFirst":"Please select multiple cells first!",
   "mergeSplitCells":"Merge/Split Cells",
   "image":"Image",
-  "importExcel":"Import Excel",
+  "importExcel":"Import Excel or UReport File",
   "italic":"Italic",
   "openFile":"Open File...",
   "setting":"Setting",
@@ -104,7 +104,8 @@
       "save":"Save",
       "successSave":"Save Successfully",
       "failSave":"Save Failed",
-      "saveAs":"Save as..."
+      "saveAs":"Save as...",
+      "saveToLocal":"Save to local"
     },
     "zxing":{
       "title":"Barcode/QRCode",
@@ -243,9 +244,9 @@
       "editItem":"Modify custom group item"
     },
     "import":{
-      "title":"Import Excel File",
+      "title":"Import Excel or UReport File",
       "desc":"This operation will import the first sheet content of Excel,if you choice the xlsx format of Excel file,if the background color could not parse,you can save the file as xls format,and upload it again.",
-      "file":"Select the excel file to import:",
+      "file":"Select the excel or ureport file to import:",
       "upload":"Upload",
       "fail":"Import fail"
     },
@@ -362,6 +363,7 @@
       "currentWindow":"Current Window",
       "parentWindow":"Parent Window",
       "topWindow":"Top Window",
+      "iframeWindow":"Pop Window",
       "urlParameter":"URL Parameters Config",
       "linkUrl":"Please config url first!"
     },
@@ -519,6 +521,7 @@
       "urlParameterConfig":"URL Parameters",
       "parentWindow":"Parent Window",
       "topWindow":"Top Window",
+      "iframeWindow":"Pop Window",
       "urlTip":"Please config link first!",
       "cellType":"Cell Type:",
       "text":"Text",

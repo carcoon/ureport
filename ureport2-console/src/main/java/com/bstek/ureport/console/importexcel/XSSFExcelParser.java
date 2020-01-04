@@ -48,7 +48,7 @@ import com.bstek.ureport.definition.ReportDefinition;
 import com.bstek.ureport.definition.RowDefinition;
 import com.bstek.ureport.definition.value.SimpleValue;
 
-/**
+/**新版本Excel文件解析 .xlsx
  * @author Jacky.gao
  * @since 2017年5月27日
  */

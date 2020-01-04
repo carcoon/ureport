@@ -52,7 +52,7 @@ export default class PropertyPanel{
         this.chartEditorMap.set('horizontalBar',new HorizontalBarChartValueEditor(this.panel,this.context));
         this.chartEditorMap.set('area',new AreaChartValueEditor(this.panel,this.context));
         this.chartEditorMap.set('radar',new RadarChartValueEditor(this.panel,this.context));
-        this.chartEditorMap.set('polar',new PolarChartValueEditor(this.panel,this.context));
+        this.chartEditorMap.set('polarArea',new PolarChartValueEditor(this.panel,this.context));
         this.chartEditorMap.set('scatter',new ScatterChartValueEditor(this.panel,this.context));
         this.chartEditorMap.set('bubble',new BubbleChartValueEditor(this.panel,this.context));
         this.chartEditorMap.set('doughnut',new DoughnutChartValueEditor(this.panel,this.context));
@@ -80,10 +80,19 @@ export default class PropertyPanel{
             <option value="_self">${window.i18n.property.prop.currentWindow}</option>
             <option value="_parent">${window.i18n.property.prop.parentWindow}</option>
             <option value="_top">${window.i18n.property.prop.topWindow}</option>
+            <option value="_iframe">${window.i18n.property.prop.iframeWindow}</option>
         </select>`);
+
         configGroup.append(this.targetSelect);
         this.targetSelect.change(function(){
             _this.cellDef.linkTargetWindow=$(this).val();
+            if($(this).val()=="_iframe"){
+              _this.iframeWindowSet.show();
+            }else{
+              _this.iframeWindowSet.hide();
+              // delete _this.cellDef.iframeW;
+              // delete _this.cellDef.iframeH;
+            }          
             setDirty();
         });
         const urlParameterDialog=new URLParameterDialog();
@@ -102,6 +111,25 @@ export default class PropertyPanel{
         });
         this.panel.append(this.linkGroup);
         this.linkGroup.hide();
+        
+        // 弹出窗口设置
+        this.iframeWindowSet=$(`<div class="" style="display:none;width: 350px;font-size: 12px;height: 25px;padding: 3px;"></div>`);
+        this.iframeWSpan=$(`<span>宽度(pt)：</span>`);
+        this.iframeHSpan=$(`<span>高度(pt)：</span>`);
+        this.iframeW=$(`<input class="form-control" style="display: inline-block;width: 60px;font-size: 12px;height: 25px;padding: 3px;margin-right:20px;"/>`);
+        this.iframeH=$(`<input class="form-control" style="display: inline-block;width: 60px;font-size: 12px;height: 25px;padding: 3px;"/>`);
+        this.iframeWindowSet.append(this.iframeWSpan);
+        this.iframeWindowSet.append(this.iframeW);
+        this.iframeWindowSet.append(this.iframeHSpan);
+        this.iframeWindowSet.append(this.iframeH);
+        configGroup.append(this.iframeWindowSet);
+        this.iframeW.change(function(){
+          _this.cellDef.iframeW=$(this).val();
+        });
+        this.iframeH.change(function(){
+          _this.cellDef.iframeH=$(this).val();
+        });
+
     }
 
     _buildCellType(){
@@ -404,7 +432,14 @@ export default class PropertyPanel{
         this.initialized=true;
         this.linkEditor.val(cellDef.linkUrl);
         this.targetSelect.val(cellDef.linkTargetWindow);
-
+        if(cellDef.linkTargetWindow=="_iframe"){
+          this.iframeWindowSet.show();
+        }else{
+            this.iframeWindowSet.hide();
+        }
+        this.iframeW.val(cellDef.iframeW);
+        this.iframeH.val(cellDef.iframeH);
+      
         this._buildParentCellNameOptions(this.leftParentCellNameSelect);
         this._buildParentRowNumberOptions(this.leftParentRowNumberSelect);
         this._buildParentCellNameOptions(this.topParentCellNameSelect);

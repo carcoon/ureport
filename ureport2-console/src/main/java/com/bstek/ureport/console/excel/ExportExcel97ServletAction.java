@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bstek.ureport.exception.ReportException;
 import org.apache.commons.lang.StringUtils;
 
 import com.bstek.ureport.build.ReportBuilder;
@@ -65,44 +66,47 @@ public class ExportExcel97ServletAction extends BaseServletAction {
 	
 	public void buildExcel(HttpServletRequest req, HttpServletResponse resp,boolean withPage,boolean withSheet) throws IOException {
 		String file=req.getParameter("_u");
+		file=decode(file);
 		if(StringUtils.isBlank(file)){
 			throw new ReportComputeException("Report file can not be null.");
 		}
-		String fileName=req.getParameter("_n");
-		if(StringUtils.isNotBlank(fileName)){
-			fileName=decode(fileName);
-		}else{
-			fileName="ureport.xls";
-		}
-		resp.setContentType("application/octet-stream;charset=ISO8859-1");
-		resp.setHeader("Content-Disposition","attachment;filename=\"" + fileName + "\"");
-		Map<String, Object> parameters = buildParameters(req);
 		OutputStream outputStream=resp.getOutputStream();
-		if(file.equals(PREVIEW_KEY)){
-			ReportDefinition reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
-			if(reportDefinition==null){
-				throw new ReportDesignException("Report data has expired,can not do export excel.");
-			}
-			Report report=reportBuilder.buildReport(reportDefinition, parameters);	
-			if(withPage){
-				excelProducer.produceWithPaging(report, outputStream);
-			}else if(withSheet){
-				excelProducer.produceWithSheet(report, outputStream);
+		try {
+			String fileName=req.getParameter("_n");
+			fileName=buildDownloadFileName(file, fileName, ".xls");
+			resp.setContentType("application/octet-stream;charset=ISO8859-1");
+			fileName=new String(fileName.getBytes("UTF-8"),"ISO8859-1");
+			resp.setHeader("Content-Disposition","attachment;filename=\"" + fileName + "\"");
+			Map<String, Object> parameters = buildParameters(req);
+			if(file.equals(PREVIEW_KEY)){
+				ReportDefinition reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+				if(reportDefinition==null){
+					throw new ReportDesignException("Report data has expired,can not do export excel.");
+				}
+				Report report=reportBuilder.buildReport(reportDefinition, parameters);
+				if(withPage){
+					excelProducer.produceWithPaging(report, outputStream);
+				}else if(withSheet){
+					excelProducer.produceWithSheet(report, outputStream);
+				}else{
+					excelProducer.produce(report, outputStream);
+				}
 			}else{
-				excelProducer.produce(report, outputStream);				
+				ExportConfigure configure=new ExportConfigureImpl(file,parameters,outputStream);
+				if(withPage){
+					exportManager.exportExcel97WithPaging(configure);
+				}else if(withSheet){
+					exportManager.exportExcel97WithPagingSheet(configure);
+				}else{
+					exportManager.exportExcel97(configure);
+				}
 			}
-		}else{
-			ExportConfigure configure=new ExportConfigureImpl(file,parameters,outputStream);
-			if(withPage){
-				exportManager.exportExcelWithPaging(configure);
-			}else if(withSheet){
-				exportManager.exportExcelWithPagingSheet(configure);
-			}else{
-				exportManager.exportExcel(configure);
-			}
+		}catch(Exception ex) {
+			throw new ReportException(ex);
+		}finally {
+			outputStream.flush();
+			outputStream.close();
 		}
-		outputStream.flush();
-		outputStream.close();
 	}
 	
 	public void setReportBuilder(ReportBuilder reportBuilder) {

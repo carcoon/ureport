@@ -58,6 +58,30 @@ export default class SaveTool extends Tool{
             const content=tableToXml(_this.context);
             saveDialog.show(content,_this.context);
         });
+        const saveToLocal=$(`<li>
+                <a href="###">
+                    <i class="glyphicon glyphicon-floppy-disk" style="color: #0e90d2;font-size: 16px"></i> ${window.i18n.tools.save.saveToLocal}
+                </a>
+            </li>`);
+        ul.append(saveToLocal);
+        saveToLocal.click(function(){
+            const content=tableToXml(_this.context);
+            let localFile=window._reportFile;
+            if(!localFile){
+                localFile = '未命名报表';
+            }
+            let url=window._server+"/designer/downloadReportFile";
+            let iframe = $('<iframe id="down-file-iframe" />');
+            let form = $('<form target="down-file-iframe" method="POST" action="'+url+'"/>');
+
+            form.append('<input type="hidden" name="file" value="' + localFile+ '" />');
+            form.append('<input type="hidden" name="content" value="' + content+ '" />');
+            iframe.append(form);
+            $(document.body).append(iframe);
+            form[0].submit();
+            iframe.remove();
+
+        });
 
         group.append(mainBtn);
         group.append(ul);

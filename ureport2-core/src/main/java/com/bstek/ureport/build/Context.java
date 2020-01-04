@@ -36,7 +36,7 @@ import com.bstek.ureport.model.Cell;
 import com.bstek.ureport.model.Column;
 import com.bstek.ureport.model.Report;
 import com.bstek.ureport.model.Row;
-import com.bstek.ureport.utils.ElCalculator;
+import com.bstek.ureport.utils.ElCompute;
 
 /**
  * @author Jacky.gao
@@ -48,13 +48,13 @@ public class Context {
 	private int pageIndex;
 	private int totalPages;
 	private boolean doPaging;
+	private Map<String,Object> variableMap=new HashMap<String,Object>();
 	private Map<Integer,List<Row>> currentPageRowsMap=new HashMap<Integer,List<Row>>();
 	private Map<String,Dataset> datasetMap;
 	private ApplicationContext applicationContext;
 	private ReportBuilder reportBuilder;
 	private Map<String,Object> parameters;
 	private HideRowColumnBuilder hideRowColumnBuilder;
-	private ElCalculator elCalculator=new ElCalculator();
 	private List<Cell> existPageFunctionCells=new ArrayList<Cell>();
 	private Map<String,List<Cell>> unprocessedCellsMap = new HashMap<String,List<Cell>>();
 	private Map<Row,Map<Column,Cell>> blankCellsMap=new HashMap<Row,Map<Column,Cell>>();
@@ -268,7 +268,7 @@ public class Context {
 	}
 	
 	public Object evalExpr(String expression){
-		return elCalculator.eval(expression);
+		return new ElCompute().doCompute(expression);
 	}
 	
 	public boolean isCellPocessed(String cellName){
@@ -314,5 +314,16 @@ public class Context {
 	
 	public Cell getRootCell() {
 		return rootCell;
+	}
+	
+	public void putVariable(String key,Object value){
+		variableMap.put(key, value);
+	}
+	
+	public void resetVariableMap(){
+		variableMap.clear();
+	}
+	public Object getVariable(String key){
+		return variableMap.get(key);
 	}
 }

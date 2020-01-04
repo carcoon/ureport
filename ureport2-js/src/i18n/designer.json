@@ -3,7 +3,7 @@
   "selectMultiTargetCellFirst":"请选择多个单元格后再进行此操作!",
   "mergeSplitCells":"合并/拆分单元格",
   "image":"图片",
-  "importExcel":"导入Excel模版文件",
+  "importExcel":"导入Excel或UReport模版文件",
   "italic":"倾斜",
   "openFile":"打开报表文件",
   "setting":"设置",
@@ -104,7 +104,8 @@
       "save":"保存",
       "successSave":"保存成功！",
       "failSave":"文件保存错误！",
-      "saveAs":"另存为"
+      "saveAs":"另存为",
+      "saveToLocal":"保存到本地"
     },
     "zxing":{
       "title":"二维码/条码",
@@ -243,9 +244,9 @@
       "editItem":"修改自定义分组项"
     },
     "import":{
-      "title":"导入Excel模版文件",
-      "desc":"此操作将导入Excel的第一个Sheet页内容，如果选择是的xlsx格式的Excel文件，导入后发现背景色未正常解析，可将该文件另存为xls格式，再次上传这个xls格式Excel文件即可。",
-      "file":"请选择要导入的Excel文件：",
+      "title":"导入Excel或Ureport模版文件",
+      "desc":"此操作将导入Excel的第一个Sheet页内容，如果选择是的xlsx格式的Excel文件，导入后发现背景色未正常解析，可将该文件另存为xls格式，再次上传这个xls格式Excel文件即可。UReport 为保存到本地的xml文件，扩展名为.ureport.xml。",
+      "file":"请选择要导入的Excel或Ureport文件：",
       "upload":"上传文件",
       "fail":"导入失败"
     },
@@ -362,6 +363,7 @@
       "currentWindow":"当前窗口",
       "parentWindow":"父窗口",
       "topWindow":"顶层窗口",
+      "iframeWindow":"弹出窗口",
       "urlParameter":"URL参数配置",
       "linkUrl":"请先定义链接URL！"
     },
@@ -518,6 +520,7 @@
       "currentWindow":"当前窗口",
       "parentWindow":"父窗口",
       "topWindow":"顶层窗口",
+      "iframeWindow":"弹出窗口",
       "urlParameterConfig":"URL参数配置",
       "urlTip":"请先定义链接URL！",
       "cellType":"单元格类型：",

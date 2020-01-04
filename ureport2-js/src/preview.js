@@ -1,13 +1,13 @@
 /**
  * Created by Jacky.Gao on 2017-03-17.
  */
-import Chart from "chart.js";
 import './form/external/bootstrap-datetimepicker.css';
-import {getParameter,pointToMM,showLoading,hideLoading} from './Utils.js';
+import {pointToMM,showLoading,hideLoading} from './Utils.js';
 import {alert} from './MsgBox.js';
 import PDFPrintDialog from './dialog/PDFPrintDialog.js';
 import defaultI18nJsonData from './i18n/preview.json';
 import en18nJsonData from './i18n/preview_en.json';
+import {showPopDialog} from "./MsgBox";
 (function($){
     $.fn.datetimepicker.dates['zh-CN'] = {
         days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
@@ -111,6 +111,21 @@ $(document).ready(function(){
         const url=window._server+'/excel/sheet'+urlParameters;
         window.open(url,'_blank');
     });
+    $(`.ureport-export-excel97`).click(function(){
+        const urlParameters=buildLocationSearchParameters();
+        const url=window._server+'/excel97'+urlParameters;
+        window.open(url,'_blank');
+    });
+    $(`.ureport-export-excel97-paging`).click(function(){
+        const urlParameters=buildLocationSearchParameters();
+        const url=window._server+'/excel97/paging'+urlParameters;
+        window.open(url,'_blank');
+    });
+    $(`.ureport-export-excel97-paging-sheet`).click(function(){
+        const urlParameters=buildLocationSearchParameters();
+        const url=window._server+'/excel97/sheet'+urlParameters;
+        window.open(url,'_blank');
+    });
 });
 
 window._currentPageIndex=null;
@@ -142,9 +157,10 @@ window.buildLocationSearchParameters=function(exclude){
                 continue;
             }
             const value=window.searchFormParameters[key];
-            if(value){
-                parameters[key]=value;
-            }
+            parameters[key]=value;
+            // if(value){
+            //     parameters[key]=value;
+            // }
         }
     }
     let p='?';
@@ -294,7 +310,12 @@ window._buildChartDatas=function(chartData){
     }
     for(let d of chartData){
         let json=d.json;
-        json=JSON.parse(json);
+        json=JSON.parse(json,function (k, v) {
+            if(v.indexOf && v.indexOf('function') > -1){
+                return eval("(function(){return "+v+" })()")
+            }
+            return v;
+        });
         _buildChart(d.id,json);
     }
 };
@@ -329,8 +350,11 @@ window._buildChart=function(canvasId,chartJson){
     };
     const chart=new Chart(ctx,chartJson);
 };
-
-window.submitSearchForm=function(file,customParameters){
+window.showPopReportDialog=function(url,width,height){
+    let title='报表详情';
+    showPopDialog(title, url, width, height);
+}
+window.buildSearchFormParameters=function () {
     window.searchFormParameters={};
     for(let fun of window.formElements){
         const json=fun.call(this);
@@ -341,6 +365,22 @@ window.submitSearchForm=function(file,customParameters){
             window.searchFormParameters[key]=value;
         }
     }
+}
+window.reloadReport=function () {
+    showLoading();
+    window.buildSearchFormParameters();
+    const parameters=window.buildLocationSearchParameters('_i');
+    let url=window._server+"/preview"+parameters;
+    const pageSelector=$(`#pageSelector`);
+    if(pageSelector.length>0){
+        url+='&_i=1';
+    }
+    window.open(url,"_self");
+
+}
+window.submitSearchForm=function(file,customParameters){
+    showLoading();
+    window.buildSearchFormParameters();
     const parameters=window.buildLocationSearchParameters('_i');
     let url=window._server+"/preview/loadData"+parameters;
     const pageSelector=$(`#pageSelector`);
@@ -351,6 +391,7 @@ window.submitSearchForm=function(file,customParameters){
         url,
         type:'POST',
         success:function(report){
+            hideLoading();
             window._currentPageIndex=1;
             const tableContainer=$(`#_ureport_table`);
             tableContainer.empty();
@@ -370,6 +411,7 @@ window.submitSearchForm=function(file,customParameters){
             }
         },
         error:function(response){
+            hideLoading();
             if(response && response.responseText){
                 alert("服务端错误："+response.responseText+"");
             }else{
