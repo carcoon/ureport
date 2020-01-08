@@ -37,7 +37,12 @@ export default class BeanMethodDialog{
         this.nameEditor=$(`<input type="text" class="form-control">`);
         col.append(this.nameEditor);
         body.append(nameRow);
-
+        const usedRow=$(`<div class="row" style="margin: 10px;">数据集使用范围</div>`);
+        this.usedInFormEditor=$(`<div class="checkbox-inline" style="margin-left: 10px;"><label><input type="checkbox" >在表单中使用</label></div>`);
+        this.usedInBodyEditor=$(`<div class="checkbox-inline" style="margin-left: 10px;"><label><input type="checkbox" >在报表中使用</label></div>`);
+        usedRow.append(this.usedInFormEditor);
+        usedRow.append(this.usedInBodyEditor);
+        body.append(usedRow);
         const _this=this;
         const methodRow=$(`<div class="row" style="margin: 10px;"><div class="col-md-3" style="text-align: right;margin-top:8px">${window.i18n.dialog.bean.methodName}</div></div>`);
         const methodCol=$(`<div class="col-md-9" style="padding: 0px;"></div>`);
@@ -85,7 +90,9 @@ export default class BeanMethodDialog{
                     }
                 }
             }
-            _this.onSave.call(this,name,method,clazz);
+            const usedInForm = this.usedInFormEditor.val();
+            const usedInBody = this.usedInBodyEditor.val();
+            _this.onSave.call(this,name,method,clazz,usedInForm,usedInBody);
             setDirty();
             _this.dialog.modal('hide');
         });
@@ -99,6 +106,8 @@ export default class BeanMethodDialog{
             this.nameEditor.val(dataset.name);
             this.methodEditor.val(dataset.method);
             this.helpEditor.val(dataset.clazz);
+            this.usedInBodyEditor.val(dataset.usedInBody);
+            this.usedInFormEditor.val(dataset.usedInForm);
         }
     }
 }

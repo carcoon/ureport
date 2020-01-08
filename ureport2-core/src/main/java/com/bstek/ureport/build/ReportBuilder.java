@@ -70,9 +70,10 @@ public class ReportBuilder extends BasePagination implements ApplicationContextA
 		cellBuildersMap.put(Expand.Down,new DownExpandBuilder());
 		cellBuildersMap.put(Expand.None,noneExpandBuilder);
 	}
-	public Report buildReport(ReportDefinition reportDefinition,Map<String,Object> parameters) {
+	public Report buildReport(ReportDefinition reportDefinition,Map<String,Object> parameters,int type) {
 		Report report = reportDefinition.newReport();
-		Map<String,Dataset> datasetMap=buildDatasets(reportDefinition, parameters, applicationContext);
+		//只需要查询报表主题就可以
+		Map<String,Dataset> datasetMap=buildDatasets(reportDefinition, parameters, applicationContext,type);
 		Context context = new Context(this,report,datasetMap,applicationContext,parameters,hideRowColumnBuilder);
 		long start=System.currentTimeMillis();
 		List<Cell> cells=new ArrayList<Cell>();
@@ -88,7 +89,11 @@ public class ReportBuilder extends BasePagination implements ApplicationContextA
 		Utils.logToConsole(msg);
 		return report;
 	}
-	
+	public Map<String,Dataset> buildFormDatasets(ReportDefinition reportDefinition,Map<String,Object> parameters){
+		Map<String,Dataset> datasetMap=buildDatasets(reportDefinition, parameters, applicationContext,Dataset.DATASET_TYPE_FORM);
+		return datasetMap;
+	}
+
 	public void buildCell(Context context,List<Cell> cells){
 		if(cells==null){
 			cells=context.nextUnprocessedCells();			
@@ -116,8 +121,15 @@ public class ReportBuilder extends BasePagination implements ApplicationContextA
 			}
 		}
 	}
-	
-	private Map<String,Dataset> buildDatasets(ReportDefinition reportDefinition,Map<String,Object> parameters,ApplicationContext applicationContext){
+
+	/**
+	 * TODO：将此方法分解成两个方法或者传入参数
+	 * @param reportDefinition
+	 * @param parameters
+	 * @param applicationContext
+	 * @return
+	 */
+	private Map<String,Dataset> buildDatasets(ReportDefinition reportDefinition,Map<String,Object> parameters,ApplicationContext applicationContext,int type){
 		Map<String,Dataset> datasetMap=new HashMap<String,Dataset>();
 		List<DatasourceDefinition> datasources=reportDefinition.getDatasources();
 		if(datasources==null){
@@ -132,9 +144,11 @@ public class ReportBuilder extends BasePagination implements ApplicationContextA
 						conn=datasourceProviderMap.get(dsName).getConnection();
 					}
 					JdbcDatasourceDefinition ds=(JdbcDatasourceDefinition)dsDef;
-					List<Dataset> ls=ds.buildDatasets(conn, parameters);
+					// TODO：dataset 增加属性判断
+					List<Dataset> ls=ds.buildDatasets(conn, parameters,type);
 					if(ls!=null){
 						for(Dataset dataset:ls){
+
 							datasetMap.put(dataset.getName(), dataset);
 						}					
 					}
@@ -170,9 +184,10 @@ public class ReportBuilder extends BasePagination implements ApplicationContextA
 						throw new ReportComputeException("Buildin datasource ["+dsName+"] not exist.");
 					}
 					BuildinDatasourceDefinition ds=(BuildinDatasourceDefinition)dsDef;
-					List<Dataset> ls=ds.buildDatasets(conn, parameters);
+					List<Dataset> ls=ds.buildDatasets(conn, parameters,type);
 					if(ls!=null){					
 						for(Dataset dataset:ls){
+							// 增加属性判断
 							datasetMap.put(dataset.getName(), dataset);
 						}
 					}

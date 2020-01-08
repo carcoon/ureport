@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bstek.ureport.build.Dataset;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -88,7 +89,7 @@ public class ExportPdfServletAction extends BaseServletAction{
 				if(reportDefinition==null){
 					throw new ReportDesignException("Report data has expired,can not do export pdf.");
 				}
-				Report report=reportBuilder.buildReport(reportDefinition, parameters);	
+				Report report=reportBuilder.buildReport(reportDefinition, parameters, Dataset.DATASET_TYPE_BODY);
 				pdfProducer.produce(report, outputStream);
 			}else{
 				ExportConfigure configure=new ExportConfigureImpl(file,parameters,outputStream);
@@ -114,10 +115,10 @@ public class ExportPdfServletAction extends BaseServletAction{
 			if(reportDefinition==null){
 				throw new ReportDesignException("Report data has expired,can not do export pdf.");
 			}
-			report=reportBuilder.buildReport(reportDefinition, parameters);	
+			report=reportBuilder.buildReport(reportDefinition, parameters, Dataset.DATASET_TYPE_BODY);
 		}else{
 			ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-			report=reportRender.render(reportDefinition, parameters);
+			report=reportRender.render(reportDefinition, parameters, Dataset.DATASET_TYPE_BODY);
 		}
 		String paper=req.getParameter("_paper");
 		ObjectMapper mapper=new ObjectMapper();

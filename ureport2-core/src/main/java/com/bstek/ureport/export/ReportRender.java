@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.bstek.ureport.build.Dataset;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -50,11 +51,11 @@ public class ReportRender implements ApplicationContextAware{
 	private RightCellbuilder rightCellParentbuilder=new RightCellbuilder();
 	public Report render(String file,Map<String,Object> parameters){
 		ReportDefinition reportDefinition=getReportDefinition(file);
-		return reportBuilder.buildReport(reportDefinition,parameters);
+		return reportBuilder.buildReport(reportDefinition,parameters, Dataset.DATASET_TYPE_ALL);
 	}
 	
-	public Report render(ReportDefinition reportDefinition,Map<String,Object> parameters){
-		return reportBuilder.buildReport(reportDefinition,parameters);
+	public Report render(ReportDefinition reportDefinition,Map<String,Object> parameters,int type){
+		return reportBuilder.buildReport(reportDefinition,parameters,type);
 	}
 	
 	public ReportDefinition getReportDefinition(String file){

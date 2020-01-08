@@ -22,13 +22,43 @@ import java.util.List;
  * @since 2016年11月1日
  */
 public class Dataset {
+	public static final int DATASET_TYPE_ALL=0;
+	public static final int DATASET_TYPE_FORM=1;
+	public static final int DATASET_TYPE_BODY=2;
+	private boolean usedInForm;
+	private boolean usedInBody;
 	private String name;
 	private List<?> data;
 	
 	public Dataset(String name, List<?> data) {
 		this.name = name;
 		this.data = data;
+		this.usedInForm=true;
+		this.usedInBody=true;
 	}
+	public Dataset(String name, List<?> data,boolean usedInForm,boolean usedInBody) {
+		this.name = name;
+		this.data = data;
+		this.usedInForm=usedInForm;
+		this.usedInBody=usedInBody;
+	}
+
+	public boolean isUsedInForm() {
+		return usedInForm;
+	}
+
+	public void setUsedInForm(boolean usedInForm) {
+		this.usedInForm = usedInForm;
+	}
+
+	public boolean isUsedInBody() {
+		return usedInBody;
+	}
+
+	public void setUsedInBody(boolean usedInBody) {
+		this.usedInBody = usedInBody;
+	}
+
 	public String getName() {
 		return name;
 	}

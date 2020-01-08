@@ -42,6 +42,8 @@ import com.bstek.ureport.utils.ProcedureUtils;
  */
 public class SqlDatasetDefinition implements DatasetDefinition {
 	private static final long serialVersionUID = -1134526105416805870L;
+	private boolean usedInForm;
+	private boolean usedInBody;
 	private String name;
 	private String sql;
 	private List<Parameter> parameters;
@@ -67,12 +69,12 @@ public class SqlDatasetDefinition implements DatasetDefinition {
 		Map<String, Object> pmap = buildParameters(parameterMap);
 		if(ProcedureUtils.isProcedure(sqlForUse)){
 			List<Map<String,Object>> result = ProcedureUtils.procedureQuery(sqlForUse,pmap,conn);
-			return new Dataset(name,result);
+			return new Dataset(name,result,usedInForm,usedInBody);
 		}
 		SingleConnectionDataSource datasource=new SingleConnectionDataSource(conn,false);
 		NamedParameterJdbcTemplate jdbcTemplate=new NamedParameterJdbcTemplate(datasource);
 		List<Map<String,Object>> list= jdbcTemplate.queryForList(sqlForUse, pmap);
-		return new Dataset(name,list);
+		return new Dataset(name,list,usedInForm,usedInBody);
 	}
 	
 	private String executeSqlExpr(Expression sqlExpr,Context context){
@@ -125,7 +127,23 @@ public class SqlDatasetDefinition implements DatasetDefinition {
 	public void setParameters(List<Parameter> parameters) {
 		this.parameters = parameters;
 	}
+	@Override
+	public boolean getUsedInForm() {
+		return usedInForm;
+	}
 
+	@Override
+	public boolean getUsedInBody() {
+		return usedInBody;
+	}
+
+	public void setUsedInForm(boolean usedInForm) {
+		this.usedInForm = usedInForm;
+	}
+
+	public void setUsedInBody(boolean usedInBody) {
+		this.usedInBody = usedInBody;
+	}
 	@Override
 	public String getName() {
 		return name;

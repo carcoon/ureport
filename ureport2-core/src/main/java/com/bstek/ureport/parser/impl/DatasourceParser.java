@@ -74,10 +74,14 @@ public class DatasourceParser implements Parser<DatasourceDefinition> {
 			}
 			Element ele=(Element)obj;
 			String type=ele.attributeValue("type");
+			String usedInForm=ele.attributeValue("used-in-form");
+			String usedInBody = ele.attributeValue("used-in-body");
 			if(type.equals("sql")){
 				SqlDatasetDefinition dataset=new SqlDatasetDefinition();
 				dataset.setName(ele.attributeValue("name"));
 				dataset.setSql(parseSql(ele,dataset));
+				dataset.setUsedInForm(Boolean.parseBoolean(usedInForm));
+				dataset.setUsedInBody(Boolean.parseBoolean(usedInBody));
 				dataset.setFields(parseFields(ele));
 				dataset.setParameters(parseParameters(ele));
 				list.add(dataset);
@@ -85,6 +89,8 @@ public class DatasourceParser implements Parser<DatasourceDefinition> {
 				BeanDatasetDefinition dataset=new BeanDatasetDefinition();
 				dataset.setName(ele.attributeValue("name"));
 				dataset.setMethod(ele.attributeValue("method"));
+				dataset.setUsedInForm(Boolean.parseBoolean(usedInForm));
+				dataset.setUsedInBody(Boolean.parseBoolean(usedInBody));
 				dataset.setFields(parseFields(ele));
 				dataset.setClazz(ele.attributeValue("clazz"));
 				list.add(dataset);

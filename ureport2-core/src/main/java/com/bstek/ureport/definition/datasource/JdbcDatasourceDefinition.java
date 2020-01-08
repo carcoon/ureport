@@ -39,18 +39,24 @@ public class JdbcDatasourceDefinition implements DatasourceDefinition {
 	private String password;
 	private List<DatasetDefinition> datasets;
 	
-	public List<Dataset> buildDatasets(Connection conn,Map<String,Object> parameters){
+	public List<Dataset> buildDatasets(Connection conn,Map<String,Object> parameters,int type){
 		if(datasets==null || datasets.size()==0){
 			return null;
 		}
-		if(conn==null)conn=getConnection();
+		if(conn==null){
+			conn=getConnection();
+		}
 		List<Dataset> list=new ArrayList<Dataset>();
 		try{
 			
 			for(DatasetDefinition dsDef:datasets){
 				SqlDatasetDefinition sqlDataset=(SqlDatasetDefinition)dsDef;
-				Dataset ds=sqlDataset.buildDataset(parameters, conn);
-				list.add(ds);
+				if(type==Dataset.DATASET_TYPE_ALL ||
+						(sqlDataset.getUsedInForm() && Dataset.DATASET_TYPE_FORM==type)||
+						(sqlDataset.getUsedInBody() && Dataset.DATASET_TYPE_BODY==type)) {
+					Dataset ds = sqlDataset.buildDataset(parameters, conn);
+					list.add(ds);
+				}
 			}			
 		}finally{
 			try {

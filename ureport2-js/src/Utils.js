@@ -490,7 +490,7 @@ export function tableToXml(context){
             ds+=` driver="${datasource.driver}"`;
             ds+='>';
             for(let dataset of datasource.datasets){
-                ds+=`<dataset name="${encode(dataset.name)}" type="sql">`;
+                ds+=`<dataset name="${encode(dataset.name)}" type="sql" used-in-form="${dataset.usedInForm}" used-in-body="${dataset.usedInBody}">`;
                 ds+=`<sql><![CDATA[${dataset.sql}]]></sql>`;
                 for(let field of dataset.fields){
                     ds+=`<field name="${field.name}"/>`;
@@ -503,7 +503,7 @@ export function tableToXml(context){
         }else if(type==='spring'){
             ds+=` bean="${datasource.beanId}">`;
             for(let dataset of datasource.datasets){
-                ds+=`<dataset name="${encode(dataset.name)}" type="bean" method="${dataset.method}" clazz="${dataset.clazz}">`;
+                ds+=`<dataset name="${encode(dataset.name)}" type="bean" method="${dataset.method}" clazz="${dataset.clazz}" used-in-form="${dataset.usedInForm}" used-in-body="${dataset.usedInBody}">`;
                 for(let field of dataset.fields){
                     ds+=`<field name="${field.name}"/>`;
                 }
@@ -512,7 +512,8 @@ export function tableToXml(context){
         }else if(type==='buildin'){
             ds+='>';
             for(let dataset of datasource.datasets){
-                ds+=`<dataset name="${encode(dataset.name)}" type="sql">`;
+                console.log("dataset name="+dataset.name+" used-in-form="+dataset.usedInForm+" used-in-body="+dataset.usedInBody+"");
+                ds+=`<dataset name="${encode(dataset.name)}" type="sql" used-in-form="${dataset.usedInForm}" used-in-body="${dataset.usedInBody}">`;
                 ds+=`<sql><![CDATA[${dataset.sql}]]></sql>`;
                 for(let field of dataset.fields){
                     ds+=`<field name="${field.name}"/>`;

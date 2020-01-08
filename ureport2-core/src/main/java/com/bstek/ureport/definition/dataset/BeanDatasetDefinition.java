@@ -28,6 +28,8 @@ import com.bstek.ureport.exception.ReportComputeException;
  */
 public class BeanDatasetDefinition implements DatasetDefinition {
 	private static final long serialVersionUID = -1332306988025304185L;
+	private boolean usedInForm;
+	private boolean usedInBody;
 	private String name;
 	private String method;
 	private String clazz;
@@ -39,7 +41,7 @@ public class BeanDatasetDefinition implements DatasetDefinition {
 			Method m=obj.getClass().getMethod(method, new Class[]{String.class,String.class,Map.class});
 			Object result=m.invoke(obj, new Object[]{datasourceName,name,parameters});
 			List<Object> list=(List<Object>)result;
-			return new Dataset(name,list);
+			return new Dataset(name,list,usedInForm,usedInBody);
 		} catch (Exception e) {
 			throw new ReportComputeException(e);
 		}
@@ -60,7 +62,25 @@ public class BeanDatasetDefinition implements DatasetDefinition {
 	public void setClazz(String clazz) {
 		this.clazz = clazz;
 	}
-	
+
+	@Override
+	public boolean getUsedInForm() {
+		return usedInForm;
+	}
+
+	@Override
+	public boolean getUsedInBody() {
+		return usedInBody;
+	}
+
+	public void setUsedInForm(boolean usedInForm) {
+		this.usedInForm = usedInForm;
+	}
+
+	public void setUsedInBody(boolean usedInBody) {
+		this.usedInBody = usedInBody;
+	}
+
 	@Override
 	public String getName() {
 		return name;

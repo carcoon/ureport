@@ -18,6 +18,7 @@ package com.bstek.ureport.export;
 import java.util.List;
 import java.util.Map;
 
+import com.bstek.ureport.build.Dataset;
 import com.bstek.ureport.build.paging.Page;
 import com.bstek.ureport.cache.CacheUtils;
 import com.bstek.ureport.chart.ChartData;
@@ -41,13 +42,18 @@ public class ExportManagerImpl implements ExportManager {
 	private ExcelProducer excelProducer=new ExcelProducer();
 	private Excel97Producer excel97Producer=new Excel97Producer();
 	private PdfProducer pdfProducer=new PdfProducer();
+
 	@Override
-	public HtmlReport exportHtml(String file,String contextPath,Map<String, Object> parameters) {
+	public HtmlReport exportHtml(String file, String contextPath, Map<String, Object> parameters, boolean loadall) {
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		int type=Dataset.DATASET_TYPE_BODY;
+		if(loadall){
+			type=Dataset.DATASET_TYPE_ALL;
+		}
+		Report report=reportRender.render(reportDefinition, parameters,type);
 		Map<String, ChartData> chartMap=report.getContext().getChartDataMap();
 		if(chartMap.size()>0){
-			CacheUtils.storeChartDataMap(chartMap);				
+			CacheUtils.storeChartDataMap(chartMap);
 		}
 		HtmlReport htmlReport=new HtmlReport();
 		String content=htmlProducer.produce(report);
@@ -56,20 +62,26 @@ public class ExportManagerImpl implements ExportManager {
 			htmlReport.setColumn(reportDefinition.getPaper().getColumnCount());
 		}
 		htmlReport.setStyle(reportDefinition.getStyle());
-		htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(),parameters));
+		if(loadall) {
+			htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(), parameters));
+		}
 		htmlReport.setReportAlign(report.getPaper().getHtmlReportAlign().name());
 		htmlReport.setChartDatas(report.getContext().getChartDataMap().values());
 		htmlReport.setHtmlIntervalRefreshValue(report.getPaper().getHtmlIntervalRefreshValue());
 		return htmlReport;
 	}
-	
+
 	@Override
-	public HtmlReport exportHtml(String file,String contextPath,Map<String, Object> parameters, int pageIndex) {
+	public HtmlReport exportHtml(String file, String contextPath, Map<String, Object> parameters, int pageIndex, boolean loadall) {
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		int type=Dataset.DATASET_TYPE_BODY;
+		if(loadall){
+			type=Dataset.DATASET_TYPE_ALL;
+		}
+		Report report=reportRender.render(reportDefinition, parameters,type);
 		Map<String, ChartData> chartMap=report.getContext().getChartDataMap();
 		if(chartMap.size()>0){
-			CacheUtils.storeChartDataMap(chartMap);				
+			CacheUtils.storeChartDataMap(chartMap);
 		}
 		SinglePageData pageData=PageBuilder.buildSinglePageData(pageIndex, report);
 		List<Page> pages=pageData.getPages();
@@ -77,7 +89,7 @@ public class ExportManagerImpl implements ExportManager {
 		if(pages.size()==1){
 			content=htmlProducer.produce(report.getContext(),pages.get(0),false);
 		}else{
-			content=htmlProducer.produce(report.getContext(),pages,pageData.getColumnMargin(),false);			
+			content=htmlProducer.produce(report.getContext(),pages,pageData.getColumnMargin(),false);
 		}
 		HtmlReport htmlReport=new HtmlReport();
 		htmlReport.setContent(content);
@@ -85,7 +97,10 @@ public class ExportManagerImpl implements ExportManager {
 			htmlReport.setColumn(reportDefinition.getPaper().getColumnCount());
 		}
 		htmlReport.setStyle(reportDefinition.getStyle());
-		htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(),parameters));
+		//应该不是每次都这样，只有第一次需要加载
+		if(loadall) {
+			htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(), parameters));
+		}
 		htmlReport.setPageIndex(pageIndex);
 		htmlReport.setTotalPage(pageData.getTotalPages());
 		htmlReport.setReportAlign(report.getPaper().getHtmlReportAlign().name());
@@ -93,12 +108,22 @@ public class ExportManagerImpl implements ExportManager {
 		htmlReport.setHtmlIntervalRefreshValue(report.getPaper().getHtmlIntervalRefreshValue());
 		return htmlReport;
 	}
+
+	@Override
+	public HtmlReport exportHtml(String file,String contextPath,Map<String, Object> parameters) {
+		return exportHtml(file, contextPath, parameters, true);
+	}
+	
+	@Override
+	public HtmlReport exportHtml(String file,String contextPath,Map<String, Object> parameters, int pageIndex) {
+		return exportHtml(file, contextPath, parameters, pageIndex, true);
+	}
 	@Override
 	public void exportPdf(ExportConfigure config) {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		pdfProducer.produce(report, config.getOutputStream());
 	}
 	@Override
@@ -106,7 +131,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		wordProducer.produce(report, config.getOutputStream());
 	}
 	@Override
@@ -114,7 +139,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excelProducer.produce(report, config.getOutputStream());
 	}
 	
@@ -123,7 +148,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excel97Producer.produce(report, config.getOutputStream());
 	}
 	
@@ -132,7 +157,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excelProducer.produceWithPaging(report, config.getOutputStream());
 	}
 	@Override
@@ -140,7 +165,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excel97Producer.produceWithPaging(report, config.getOutputStream());
 	}
 	
@@ -149,7 +174,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excelProducer.produceWithSheet(report, config.getOutputStream());
 	}
 	
@@ -158,7 +183,7 @@ public class ExportManagerImpl implements ExportManager {
 		String file=config.getFile();
 		Map<String, Object> parameters=config.getParameters();
 		ReportDefinition reportDefinition=reportRender.getReportDefinition(file);
-		Report report=reportRender.render(reportDefinition, parameters);
+		Report report=reportRender.render(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		excel97Producer.produceWithSheet(report, config.getOutputStream());
 	}
 	

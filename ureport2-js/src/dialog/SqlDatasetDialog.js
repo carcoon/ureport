@@ -36,10 +36,13 @@ export default class SqlDatasetDialog{
         const rightContainer=$(`<div style="display: inline-block"></div>`);
         container.append(leftContainer);
         container.append(rightContainer);
+        // 加载数据库的所有表
         this.initTables(leftContainer);
-
+        // 初始化数据集详情
         this.initSqlEditor(rightContainer);
+        // 初始化参数详情
         this.initParameterEditor(rightContainer);
+        // 初始化按钮
         this.initButton(footer);
     }
     initTables(container){
@@ -72,6 +75,7 @@ export default class SqlDatasetDialog{
         const table=$(`<table class="table table-bordered" style="font-size: 12px"><thead><tr style="height: 30px;background: #fafafa"><td style="width: 135px;vertical-align: middle">${window.i18n.dialog.sql.tableName}</td><td style="width: 35px;vertical-align: middle">${window.i18n.dialog.sql.type}</td></tr></thead></table>`);
         this.tableBody=$(`<tbody></tbody>`);
         table.append(this.tableBody);
+
         container.append(table);
     }
     initSqlEditor(body){
@@ -79,7 +83,12 @@ export default class SqlDatasetDialog{
         this.nameEditor=$(`<input type="text" class="form-control" style="font-size: 13px;width:570px;display: inline-block">`);
         nameRow.append(this.nameEditor);
         body.append(nameRow);
-
+        const usedRow=$(`<div class="row" style="margin: 10px;">数据集使用范围</div>`);
+        this.usedInFormEditor=$(`<div class="checkbox-inline" style="margin-left: 10px;"><label><input type="checkbox" >在表单中使用</label></div>`);
+        this.usedInBodyEditor=$(`<div class="checkbox-inline" style="margin-left: 10px;"><label><input type="checkbox" >在报表中使用</label></div>`);
+        usedRow.append(this.usedInFormEditor);
+        usedRow.append(this.usedInBodyEditor);
+        body.append(usedRow);
         const sqlRow=$(`<div class="row" style="margin:10px;">SQL(<span style="color: #999999;font-size: 12px;">${window.i18n.dialog.sql.desc}`);
         this.sqlEditor=$(`<textarea placeholder="select username,dept_id from employee where dept_id=:deptId" class="form-control" rows="8" cols="30" style="width: 660px"></textarea>`);
         sqlRow.append(this.sqlEditor);
@@ -180,6 +189,10 @@ export default class SqlDatasetDialog{
         footer.append(confirmButton);
         confirmButton.click(function(){
             const name=_this.nameEditor.val(),sql=_this.codeMirror.getValue();
+
+            const usedInForm = _this.usedInFormEditor.find("input[type='checkbox']").prop("checked");
+            const usedInBody = _this.usedInBodyEditor.find("input[type='checkbox']").prop("checked");
+            console.log("name="+name+" usedInForm=" + usedInForm + " usedInBody=" + usedInBody);
             if(!name || name===""){
                 alert(`${window.i18n.dialog.sql.nameTip}`);
                 return;
@@ -203,21 +216,30 @@ export default class SqlDatasetDialog{
                     }
                 }
             }
-            _this.onSave.call(this,name,sql,_this.data.parameters);
+            _this.onSave.call(this,name,sql,_this.data.parameters,usedInForm,usedInBody);
             setDirty();
             _this.dialog.modal('hide');
         });
     }
 
-    show(onSave,params){
-        this.onSave=onSave;
-        if(params){
-            this.data=params;
-            this.parameterTable.data=this.data.parameters;
+    show(onSave,params) {
+        this.onSave = onSave;
+        if (params) {
+            this.data = params;
+            this.parameterTable.data = this.data.parameters;
         }
+        console.log(this.data);
         this.dialog.modal('show');
-        this.oldName=this.data.name;
+        this.oldName = this.data.name;
         this.nameEditor.val(this.data.name);
+        // if (this.data.usedInBody) {
+        this.usedInBodyEditor.find("input[type='checkbox']").prop("checked",this.data.usedInBody);
+        // }
+        //
+        // if(this.data.usedInForm){
+        this.usedInFormEditor.find("input[type='checkbox']").prop("checked",this.data.usedInForm);
+        // }
+
         this.parameterTable.refreshData();
         setTimeout(()=>{
             if(!this.codeMirror){

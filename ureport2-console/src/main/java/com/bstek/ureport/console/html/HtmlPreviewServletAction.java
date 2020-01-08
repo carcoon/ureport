@@ -28,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bstek.ureport.build.Dataset;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -75,7 +76,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 			HtmlReport htmlReport=null;
 			String errorMsg=null;
 			try{
-				htmlReport=loadReport(req);
+				htmlReport=loadReport(req,Dataset.DATASET_TYPE_ALL);
 			}catch(Exception ex){
 				if(!(ex instanceof ReportDesignException)){
 					ex.printStackTrace();					
@@ -185,8 +186,36 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 	}
 	
 	public void loadData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HtmlReport htmlReport=loadReport(req);
+		HtmlReport htmlReport=loadReport(req,Dataset.DATASET_TYPE_BODY);
 		writeObjectToJson(resp, htmlReport);
+	}
+
+	/**
+	 * 加载查询表单
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void loadForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String file=req.getParameter("_u");
+		file=decode(file);
+		if(StringUtils.isBlank(file)){
+			throw new ReportComputeException("Report file can not be null.");
+		}
+		Map<String, Object> parameters = buildParameters(req);
+		ReportDefinition reportDefinition=null;
+		if(file.equals(PREVIEW_KEY)){
+			reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+			if(reportDefinition==null){
+				throw new ReportDesignException("Report data has expired,can not do export excel.");
+			}
+		}else{
+			reportDefinition=reportRender.getReportDefinition(file);
+		}
+		Map<String,Dataset> datasetMap=reportBuilder.buildFormDatasets(reportDefinition, parameters);
+		SearchFormData searchFormData = reportDefinition.buildSearchFormData(datasetMap,parameters);
+		writeObjectToJson(resp, searchFormData);
 	}
 
 	public void loadPrintPages(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -205,7 +234,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		}else{
 			reportDefinition=reportRender.getReportDefinition(file);
 		}
-		Report report=reportBuilder.buildReport(reportDefinition, parameters);	
+		Report report=reportBuilder.buildReport(reportDefinition, parameters,Dataset.DATASET_TYPE_BODY);
 		Map<String, ChartData> chartMap=report.getContext().getChartDataMap();
 		if(chartMap.size()>0){
 			CacheUtils.storeChartDataMap(chartMap);				
@@ -262,7 +291,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		writeObjectToJson(resp, paper);
 	}
 	
-	private HtmlReport loadReport(HttpServletRequest req) {
+	private HtmlReport loadReport(HttpServletRequest req,int type) {
 		Map<String, Object> parameters = buildParameters(req);
 		HtmlReport htmlReport=null;
 		String file=req.getParameter("_u");
@@ -276,7 +305,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 			if(reportDefinition==null){
 				throw new ReportDesignException("Report data has expired,can not do preview.");
 			}
-			Report report=reportBuilder.buildReport(reportDefinition, parameters);
+			Report report=reportBuilder.buildReport(reportDefinition, parameters, type);
 			Map<String, ChartData> chartMap=report.getContext().getChartDataMap();
 			if(chartMap.size()>0){
 				CacheUtils.storeChartDataMap(chartMap);				
@@ -312,9 +341,9 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		}else{
 			if(StringUtils.isNotBlank(pageIndex) && !pageIndex.equals("0")){
 				int index=Integer.valueOf(pageIndex);
-				htmlReport=exportManager.exportHtml(file,req.getContextPath(),parameters,index);								
+				htmlReport=exportManager.exportHtml(file,req.getContextPath(),parameters,index,type==Dataset.DATASET_TYPE_ALL);
 			}else{
-				htmlReport=exportManager.exportHtml(file,req.getContextPath(),parameters);				
+				htmlReport=exportManager.exportHtml(file,req.getContextPath(),parameters,type==Dataset.DATASET_TYPE_ALL);
 			}
 		}
 		return htmlReport;

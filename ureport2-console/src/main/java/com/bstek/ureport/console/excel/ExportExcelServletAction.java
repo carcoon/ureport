@@ -23,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bstek.ureport.build.Dataset;
 import org.apache.commons.lang.StringUtils;
 
 import com.bstek.ureport.build.ReportBuilder;
@@ -83,7 +84,7 @@ public class ExportExcelServletAction extends BaseServletAction {
 				if(reportDefinition==null){
 					throw new ReportDesignException("Report data has expired,can not do export excel.");
 				}
-				Report report=reportBuilder.buildReport(reportDefinition, parameters);	
+				Report report=reportBuilder.buildReport(reportDefinition, parameters, Dataset.DATASET_TYPE_BODY);
 				if(withPage){
 					excelProducer.produceWithPaging(report, outputStream);
 				}else if(withSheet){

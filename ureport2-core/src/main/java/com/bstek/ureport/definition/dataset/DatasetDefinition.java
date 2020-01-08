@@ -24,6 +24,8 @@ import java.util.List;
  * @since 2016年12月27日
  */
 public interface DatasetDefinition extends Serializable{
+	boolean getUsedInForm();
+	boolean getUsedInBody();
 	String getName();
 	List<Field> getFields();
 }

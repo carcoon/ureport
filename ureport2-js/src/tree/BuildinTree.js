@@ -47,8 +47,8 @@ export default class BuildinTree extends BaseTree{
             callback:function(key,options){
                 if(key==='add'){
                     const span=$(options.selector);
-                    datasetDialog.show(function(name,sql,parameters){
-                        const dataset={name,sql,parameters};
+                    datasetDialog.show(function(name,sql,parameters,usedInForm,usedInBody){
+                        const dataset={name,sql,parameters,usedInForm,usedInBody};
                         _this.datasets.push(dataset);
                         const fieldsUL=_this.addDataset(dataset);
                         _this.buildFileds(dataset,fieldsUL);
@@ -123,9 +123,12 @@ export default class BuildinTree extends BaseTree{
                         li.remove();
                     });
                 }else if(key === 'edit'){
-                    datasetDialog.show(function(name,sql,parameters){
+                    datasetDialog.show(function(name,sql,parameters,usedInForm,usedInBody){
+                        console.log("name="+name+" usedInForm="+usedInForm+" usedInBody="+usedInBody);
                         dataset.name=name;
                         dataset.sql=sql;
+                        dataset.usedInBody=usedInBody;
+                        dataset.usedInForm=usedInForm;
                         dataset.parameters=parameters;
                         span.find(".dataset_name").html(name);
                         dataset.fields=null;
