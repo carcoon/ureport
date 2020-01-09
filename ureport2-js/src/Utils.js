@@ -10,7 +10,7 @@ export function showLoading(){
     const cover=$(`<div class="ureport-loading-cover" style="position: absolute;left: 0px;top: 0px;width:${w*2}px;height:${h*2}px;z-index: 1199;background:rgba(222,222,222,.5)"></div>`);
     $(document.body).append(cover);
     const loading=$(`<div class="ureport-loading" style="text-align: center;position: absolute;z-index: 1120;left: ${w-35}px;top: ${h-35}px;"><img src="${url}">
-    <div style="margin-top: 5px">打印数据加载中...</div></div>`);
+    <div style="margin-top: 5px">数据加载中...</div></div>`);
     $(document.body).append(loading);
 };
 

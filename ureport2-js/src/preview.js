@@ -130,7 +130,9 @@ $(document).ready(function(){
 
 window._currentPageIndex=null;
 window._totalPage=null;
-
+window.hideLoading=function(){
+    hideLoading();
+}
 window.buildLocationSearchParameters=function(exclude){
     let urlParameters=window.location.search;
     if(urlParameters.length>0){
@@ -157,10 +159,9 @@ window.buildLocationSearchParameters=function(exclude){
                 continue;
             }
             const value=window.searchFormParameters[key];
-            parameters[key]=value;
-            // if(value){
-            //     parameters[key]=value;
-            // }
+            if(value){
+                parameters[key]=value;
+            }
         }
     }
     let p='?';
@@ -173,7 +174,63 @@ window.buildLocationSearchParameters=function(exclude){
     }
     return p;
 };
+window.buildLocationUrl=function(exclude){
+    let urlParameters=window.location.search;
+    if(urlParameters.length>0){
+        urlParameters=urlParameters.substring(1,urlParameters.length);
+    }
+    let parameters={};
+    const pairs=urlParameters.split('&');
+    for(let i=0;i<pairs.length;i++){
+        const item=pairs[i];
+        if(item===''){
+            continue;
+        }
+        const param=item.split('=');
+        let key=param[0];
+        if(exclude && key===exclude){
+            continue;
+        }
+        let value=param[1];
+        parameters[key]=value;
+    }
 
+    let p='?';
+    for(let key in parameters){
+        if(p==='?'){
+            p+=key+'='+parameters[key];
+        }else{
+            p+='&'+key+'='+parameters[key];
+        }
+    }
+    return p;
+};
+window.resetSearchForm=function() {
+    const parameters=window.buildLocationUrl();
+    let url=window._server+"/preview/loadForm"+parameters;
+
+    // todo:提交
+    $.ajax({
+        url,
+        type:'POST',
+        success:function(searchform){
+            console.log(searchform);
+
+            const formContainer=$(`#_ureport_searchform`);
+            formContainer.empty();
+            formContainer.append(searchform.html);
+            eval(searchform.js);
+        },
+        error:function(response){
+
+            if(response && response.responseText){
+                alert("服务端错误："+response.responseText+"");
+            }else{
+                alert('查询操作失败！');
+            }
+        }
+    });
+}
 function buildPrintStyle(paper){
     const marginLeft=pointToMM(paper.leftMargin);
     const marginTop=pointToMM(paper.topMargin);
@@ -366,6 +423,33 @@ window.buildSearchFormParameters=function () {
         }
     }
 }
+window.reloadSearchForm=function(){
+    window.buildSearchFormParameters();
+    const parameters=window.buildLocationSearchParameters('_i');
+    let url=window._server+"/preview/loadForm"+parameters;
+
+    // todo:提交
+    $.ajax({
+        url,
+        type:'POST',
+        success:function(searchform){
+            console.log(searchform);
+
+            const formContainer=$(`#_ureport_searchform`);
+            formContainer.empty();
+            formContainer.append(searchform.html);
+            eval(searchform.js);
+        },
+        error:function(response){
+
+            if(response && response.responseText){
+                alert("服务端错误："+response.responseText+"");
+            }else{
+                alert('查询操作失败！');
+            }
+        }
+    });
+}
 window.reloadReport=function () {
     showLoading();
     window.buildSearchFormParameters();
@@ -378,7 +462,7 @@ window.reloadReport=function () {
     window.open(url,"_self");
 
 }
-window.submitSearchForm=function(file,customParameters){
+window.submitSearchForm=function(){
     showLoading();
     window.buildSearchFormParameters();
     const parameters=window.buildLocationSearchParameters('_i');

@@ -26,7 +26,7 @@ public class SearchForm {
 	private FormPosition formPosition;
 	public String toHtml(RenderContext context){
 		StringBuilder sb=new StringBuilder();
-		sb.append("<form  style='margin-top:10px;margin-bottom:10px'>");
+		sb.append("<form id='_ureport_searchform' style='margin-top:10px;margin-bottom:10px'>");
 		for(Component component:components){
 			sb.append(component.toHtml(context));
 		}

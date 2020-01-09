@@ -44,7 +44,7 @@ public class SelectInputComponent extends InputComponent {
 		StringBuilder sb=new StringBuilder();
 		sb.append("<select style=\"padding:3px;height:28px\" id='"+context.buildComponentId(this)+"' name='"+name+"' ");
 		if(useAutoPost){
-			sb.append(" onchange=\"reloadReport();\" ");
+			sb.append(" onchange=\"reloadSearchForm();\" ");
 		}
 		sb.append(" class='form-control'>");
 		if(useDataset && StringUtils.isNotBlank(dataset)){
