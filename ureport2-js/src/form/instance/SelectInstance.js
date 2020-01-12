@@ -14,8 +14,6 @@ export default class SelectInstance extends Instance{
         this.element.append(this.inputElement);
         this.options=[];
         this.optionNum=1;
-        this.useAll=false;
-        this.useAutoPost=false;
         for(var i=1;i<5;i++){
             this.addOption();
         }
@@ -65,7 +63,6 @@ export default class SelectInstance extends Instance{
     toJson(){
         const json={
             label:this.label,
-            optionsInline:this.optionsInline,
             labelPosition:this.labelPosition,
             bindParameter:this.bindParameter,
             type:SelectInstance.TYPE,

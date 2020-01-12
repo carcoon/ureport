@@ -15,6 +15,11 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import com.bstek.ureport.Utils;
+import com.bstek.ureport.build.Dataset;
+import com.bstek.ureport.exception.DatasetUndefinitionException;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +28,10 @@ import java.util.List;
  * @since 2017年10月23日
  */
 public class CheckboxInputComponent extends InputComponent {
+	private boolean useDataset;
+	private String dataset;
+	private String labelField;
+	private String valueField;
 	private boolean optionsInline;
 	private List<Option> options;
 	@Override
@@ -32,15 +41,33 @@ public class CheckboxInputComponent extends InputComponent {
 		Object pvalue=context.getParameter(name)==null ? "" : context.getParameter(name);
 		String[] data=pvalue.toString().split(",");
 		List<String> list=Arrays.asList(data);
-		for(Option option:options){
-			String value=option.getValue();
-			String label=option.getLabel();
-			String checked=list.contains(value) ? "checked" : "";
-			if(this.optionsInline){
-				sb.append("<span class='checkbox-inline' style='padding-top:0px'><input value='"+value+"' type='checkbox' "+checked+" name='"+name+"'>"+label+"</span>");
-			}else{
-				sb.append("<span class='checkbox'><input type='checkbox' value='"+value+"' name='"+name+"' "+checked+" style='margin-left: auto'><span style=\"margin-left:15px\">"+label+"</span></span>");
-			}				
+		if(useDataset && StringUtils.isNotBlank(dataset)){
+			Dataset ds=context.getDataset(dataset);
+			if(ds==null){
+				throw new DatasetUndefinitionException(dataset);
+			}
+
+			for(Object obj:ds.getData()){
+				Object label= Utils.getProperty(obj, labelField);
+				Object value=Utils.getProperty(obj, valueField);
+				String checked=list.contains(value.toString()) ? "checked" : "";
+				if(this.optionsInline){
+					sb.append("<span class='checkbox-inline' style='padding-top:0px'><input value='"+value+"' type='checkbox' "+checked+" name='"+name+"'>"+label+"</span>");
+				}else{
+					sb.append("<span class='checkbox'><input type='checkbox' value='"+value+"' name='"+name+"' "+checked+" style='margin-left: auto'><span style=\"margin-left:15px\">"+label+"</span></span>");
+				}
+			}
+		}else {
+			for (Option option : options) {
+				String value = option.getValue();
+				String label = option.getLabel();
+				String checked = list.contains(value) ? "checked" : "";
+				if (this.optionsInline) {
+					sb.append("<span class='checkbox-inline' style='padding-top:0px'><input value='" + value + "' type='checkbox' " + checked + " name='" + name + "'>" + label + "</span>");
+				} else {
+					sb.append("<span class='checkbox'><input type='checkbox' value='" + value + "' name='" + name + "' " + checked + " style='margin-left: auto'><span style=\"margin-left:15px\">" + label + "</span></span>");
+				}
+			}
 		}
 		return sb.toString();
 	}
@@ -65,6 +92,39 @@ public class CheckboxInputComponent extends InputComponent {
 		sb.append(");");
 		return sb.toString();
 	}
+
+	public boolean isUseDataset() {
+		return useDataset;
+	}
+
+	public void setUseDataset(boolean useDataset) {
+		this.useDataset = useDataset;
+	}
+
+	public String getDataset() {
+		return dataset;
+	}
+
+	public void setDataset(String dataset) {
+		this.dataset = dataset;
+	}
+
+	public String getLabelField() {
+		return labelField;
+	}
+
+	public void setLabelField(String labelField) {
+		this.labelField = labelField;
+	}
+
+	public String getValueField() {
+		return valueField;
+	}
+
+	public void setValueField(String valueField) {
+		this.valueField = valueField;
+	}
+
 	public void setOptionsInline(boolean optionsInline) {
 		this.optionsInline = optionsInline;
 	}

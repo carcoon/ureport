@@ -109,16 +109,16 @@ export default class SelectProperty extends Property{
         valueGroup.append(valueSelect);
 
         const useAllGroup=$(`<div class="form-group"><label>添加全部项</label></div>`);
-        const allTrue=this.getOptionSelected(true,this.useAll);
-        const allFalse=this.getOptionSelected(false,this.useAll);
+        const allTrue=this.getOptionSelected("true",this.useAll);
+        const allFalse=this.getOptionSelected("false",this.useAll);
         const useAllSelect=$(`<select class="form-control">
             <option value="true" ${allTrue}>是</option>
             <option value="false" ${allFalse}>否</option>
         </select>`);
         useAllGroup.append(useAllSelect);
         const useAutoPostGroup=$(`<div class="form-group"><label>自动提交</label></div>`);
-        const autoPostTrue=this.getOptionSelected(true,this.useAutoPost);
-        const autoPostFalse=this.getOptionSelected(false,this.useAutoPost);
+        const autoPostTrue=this.getOptionSelected("true",this.useAutoPost);
+        const autoPostFalse=this.getOptionSelected("false",this.useAutoPost);
         const useAutoPostSelect=$(`<select class="form-control">
             <option value="true"  ${autoPostTrue}>是</option>
             <option value="false" ${autoPostFalse}>否</option>

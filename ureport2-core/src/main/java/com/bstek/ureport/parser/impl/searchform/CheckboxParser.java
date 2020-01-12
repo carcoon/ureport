@@ -18,6 +18,7 @@ package com.bstek.ureport.parser.impl.searchform;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 
 import com.bstek.ureport.definition.searchform.CheckboxInputComponent;
@@ -37,6 +38,13 @@ public class CheckboxParser implements FormParser<CheckboxInputComponent> {
 		checkbox.setLabel(element.attributeValue("label"));
 		checkbox.setType(element.attributeValue("type"));
 		checkbox.setLabelPosition(LabelPosition.valueOf(element.attributeValue("label-position")));
+		String useDataset=element.attributeValue("use-dataset");
+		if(StringUtils.isNotBlank(useDataset)){
+			checkbox.setUseDataset(Boolean.valueOf(useDataset));
+			checkbox.setDataset(element.attributeValue("dataset"));
+			checkbox.setLabelField(element.attributeValue("label-field"));
+			checkbox.setValueField(element.attributeValue("value-field"));
+		}
 		List<Option> options=new ArrayList<Option>();
 		for(Object obj:element.elements()){
 			if(obj==null || !(obj instanceof Element)){
