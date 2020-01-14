@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>报表演示</title>
+
+    <style>
+        table{
+            width: 400px;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        th,td{
+
+            border: 1px  solid #000;
+            padding: 10px;
+        }
+
+        input{
+            display: block;
+            height:40px;
+            margin: 50px auto;
+        }
+    </style>
+    <script src="js/template-web.js"></script>
+    <!-- 准备模板 -->
+    <script type="text/html" id="tpl">
+        <!-- 使用框架内置对象遍历方法-->
+        {{each  list  value}}
+        <tr>
+            <!-- 遍历 value中的值 -->
+            <td> <%= value.id %></td>
+            <td> <%= value.name %></td>
+            <td> <%= value.status %></td>
+            <td> <%= value.userId %></td>
+            <td> <%= value.createTime %></td>
+            <td> <%= value.updateTime %></td>
+            <td> <input type="button" value="设计" onclick="reportDesign('<%= value.name %>')">
+                <input type="button" value="打开" onclick="reportView('<%= value.name %>')"></td>
+        </tr>
+        {{/each}}
+    </script>
+
+</head>
+<body>
+<h3>报表列表</h3>
+<input type="button" value="加载数据" id="btnload">
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>报表名称</th>
+        <th>状态</th>
+        <th>创建人</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tb">
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    reportDesign=function (filename) {
+        let ip = window.location.hostname
+        if('127.0.0.1' === ip || 'localhost' === ip){
+            ip += ':8111'
+        }
+        var report="mysql:"+filename;
+        let url=`http://${ip}/ureport/designer?_u=${report}`
+        window.open(url,"_blank")
+    }
+    reportView=function (filename) {
+        let ip = window.location.hostname
+        if('127.0.0.1' === ip || 'localhost' === ip){
+            ip += ':8111'
+        }
+        var report="mysql:"+filename;
+        let url=`http://${ip}/ureport/preview?_u=${report}&operatorId=&stationId=&enterpriseId=&level=0&token=84a15d506dff4353b7b46c03987ad163000000000000`
+        window.open(url,"_blank")
+    }
+    let ip = window.location.hostname
+    if('127.0.0.1' === ip || 'localhost' === ip){
+        ip += ':8111'
+    }
+    document.querySelector("#btnload").onclick = function(){
+        let url = `http://${ip}/report/getReportPageList?page=0&size=100`
+        fetch(url).then(res => res.json())
+        .then(json => {
+            console.log(json);
+            var arr=json.data.content;
+        console.log(arr);
+            var html = template('tpl',{list:arr});
+            document.querySelector("#tb").innerHTML=html;
+                console.log(html);
+        })
+    }
+</script>
+</body>
+</html>

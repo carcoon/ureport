@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.bstek.ureport</groupId>
+        <artifactId>ureport2-parent</artifactId>
+        <version>2.3.2-SNAPSHOT</version>
+        <!--<relativePath>../ureport2-parent</relativePath>-->
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.bstek.ureport</groupId>
+    <artifactId>ureport2-demo</artifactId>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>1.5.19.RELEASE</spring-boot.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot,not include plugin
+                    management as the parent import style -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+           
+        </dependencies>
+    </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>disable-javadoc-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+    </profiles>
+    <!--<profiles>-->
+        <!--<profile>-->
+            <!--<id>dev</id>-->
+            <!--<properties>-->
+                <!--<profiles.active>dev</profiles.active>-->
+            <!--</properties>-->
+            <!--<activation>-->
+                <!--<activeByDefault>true</activeByDefault>-->
+            <!--</activation>-->
+        <!--</profile>-->
+        <!--<profile>-->
+            <!--<id>docker</id>-->
+            <!--<properties>-->
+                <!--<profiles.active>docker</profiles.active>-->
+            <!--</properties>-->
+        <!--</profile>-->
+    <!--</profiles>-->
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+
+        
+        <!-- 热部署 end -->
+        <!-- 监控和管理生产环境的模块 start -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-zipkin</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin-stream</artifactId>
+        </dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-stream-binder-kafka</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.kafka</groupId>-->
+            <!--<artifactId>spring-kafka</artifactId>-->
+        <!--</dependency>-->
+
+        <!-- 监控和管理生产环境的模块 end -->
+
+        <!--&lt;!&ndash; rabbitmq support &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-amqp</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+      
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bstek.ureport</groupId>
+            <artifactId>ureport2-core</artifactId>
+            <version>2.3.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bstek.ureport</groupId>
+            <artifactId>ureport2-font</artifactId>
+            <version>2.3.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bstek.ureport</groupId>
+            <artifactId>ureport2-console</artifactId>
+            <version>2.3.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.22.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.3.22.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>3.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>ooxml-schemas</artifactId>
+            <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.11</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.0.12.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- data-jpa end -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+
+
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <!--使用springboot打包工具打包-->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--<configuration>-->
+                <!--<mainClass>com.hcharger.TestDeviceApp</mainClass>-->
+                <!--</configuration>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.28.0</version>
+                <configuration>
+                    <dockerHost>tcp://192.168.33.103:2375</dockerHost>
+                    <useColor>true</useColor>
+                    <registry>192.168.33.103:5000</registry>
+                    <images>
+                        <image>
+                            <name>192.168.33.103:5000/${project.name}</name>
+                            <build>
+                                <from>192.168.33.103:5000/hhd-java</from>
+                                <args>
+                                    <JAR_FILE>${project.name}-${project.version}.jar</JAR_FILE>
+                                </args>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                    <targetDir>/maven</targetDir>
+                                </assembly>
+                                <volumes>
+                                    <volume>/log</volume>
+                                </volumes>
+                                <buildOptions>
+                                    <shmsize>2147483648</shmsize>
+                                </buildOptions>
+                                <cmd>
+                                    <shell>java -jar /maven/${project.name}-${project.version}.jar --spring.profiles.active=docker</shell>
+                                </cmd>
+                                <ports>
+                                    <port>8111</port>
+                                </ports>
+                            </build>
+                            <run>
+                                <env>
+                                    <EUREKA_SERVERS>http://hhdadmin:Hhdeureka2019@hhd-server-eureka-1:8501/eureka/</EUREKA_SERVERS>
+                                    <ADMIN_HOST>hhd-server-admin-1</ADMIN_HOST>
+                                    <DB_NAME>h_cloud_test</DB_NAME>
+                                </env>
+                                <network>
+                                    <mode>custom</mode>
+                                    <name>hhd-cloud</name>
+                                </network>
+                                <ports>
+                                    <port>8111:8111</port>
+                                </ports>
+                                <volumes>
+                                      <bind>
+                                    <!--    <volume>/logs</volume>-->
+                                        <volume>/opt/logs/:/log</volume>
+                                      </bind>
+                                     
+                                </volumes>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>
