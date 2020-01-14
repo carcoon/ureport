@@ -24,11 +24,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bstek.ureport.build.Dataset;
+import com.bstek.ureport.cache.CacheUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.bstek.ureport.build.ReportBuilder;
 import com.bstek.ureport.console.BaseServletAction;
-import com.bstek.ureport.console.cache.TempObjectCache;
 import com.bstek.ureport.console.exception.ReportDesignException;
 import com.bstek.ureport.definition.ReportDefinition;
 import com.bstek.ureport.exception.ReportComputeException;
@@ -80,7 +80,7 @@ public class ExportExcelServletAction extends BaseServletAction {
 			resp.setHeader("Content-Disposition","attachment;filename=\"" + fileName + "\"");
 			Map<String, Object> parameters = buildParameters(req);
 			if(file.equals(PREVIEW_KEY)){
-				ReportDefinition reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+				ReportDefinition reportDefinition= CacheUtils.getReportDefinition(PREVIEW_KEY);
 				if(reportDefinition==null){
 					throw new ReportDesignException("Report data has expired,can not do export excel.");
 				}

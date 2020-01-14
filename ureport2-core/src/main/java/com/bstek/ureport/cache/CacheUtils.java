@@ -31,17 +31,14 @@ import com.bstek.ureport.definition.ReportDefinition;
  */
 public class CacheUtils implements ApplicationContextAware{
 	private static ReportCache reportCache;
-	private static ReportDefinitionCache reportDefinitionCache;
+//	private static ReportDefinitionCache reportDefinitionCache;
 	private static String CHART_DATA_key="_chart_data_";
 	
 	@SuppressWarnings("unchecked")
 	public static ChartData getChartData(String chartId){
 		String key=CHART_DATA_key;
 		if(reportCache!=null){
-			Map<String, ChartData> chartDataMap = (Map<String, ChartData>)reportCache.getObject(key);
-			if(chartDataMap!=null){
-				return chartDataMap.get(chartId);				
-			}
+			reportCache.getChartData(chartId);
 		}
 		return null;
 	}
@@ -49,44 +46,41 @@ public class CacheUtils implements ApplicationContextAware{
 	public static void storeChartDataMap(Map<String, ChartData> map){
 		String key=CHART_DATA_key;
 		if(reportCache!=null){
-		    reportCache.storeObject(key, map);
+			for(Map.Entry<String, ChartData> m : map.entrySet()) {
+				reportCache.storeChartData(m.getKey(),m.getValue());
+			}
 		}
 	}
 	
-	public static Object getObject(String file){
-		if(reportCache!=null){
-			return reportCache.getObject(file);
-		}
-		return null;
-	}
-	public static void storeObject(String file,Object obj){
-		if(reportCache!=null){
-			reportCache.storeObject(file, obj);
-		}
-	}
+
 	
 	public static ReportDefinition getReportDefinition(String file){
-		return reportDefinitionCache.getReportDefinition(file);
+		return reportCache.getReportDefinition(file);
 	}
 	public static void cacheReportDefinition(String file,ReportDefinition reportDefinition){
-		reportDefinitionCache.cacheReportDefinition(file, reportDefinition);
+		reportCache.cacheReportDefinition(file, reportDefinition);
+	}
+	public static void removeReportDefinition(String file){
+		reportCache.removeReportDefinition(file);
 	}
 	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		Collection<ReportCache> coll=applicationContext.getBeansOfType(ReportCache.class).values();
-		for(ReportCache cache:coll){
-			if(cache.disabled()){
-				continue;
-			}
-			reportCache=cache;
-			break;
-		}
-		Collection<ReportDefinitionCache> reportCaches=applicationContext.getBeansOfType(ReportDefinitionCache.class).values();
+
+		Collection<ReportCache> reportCaches=applicationContext.getBeansOfType(ReportCache.class).values();
 		if(reportCaches.size()==0){
-			reportDefinitionCache=new DefaultMemoryReportDefinitionCache();
+			reportCache=new DefaultMemoryReportCache();
 		}else{
-			reportDefinitionCache=reportCaches.iterator().next();
+			for(ReportCache cache:reportCaches){
+				if(cache.disabled()){
+					continue;
+				}
+				reportCache=cache;
+				break;
+			}
+		}
+		if(reportCache==null){
+			reportCache=new DefaultMemoryReportCache();
 		}
 	}
 }

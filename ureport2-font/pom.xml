@@ -4,14 +4,14 @@
   <parent>
   	<groupId>com.bstek.ureport</groupId>
   	<artifactId>ureport2-parent</artifactId>
-  	<version>2.3.1-SNAPSHOT</version>
+  	<version>2.3.2-SNAPSHOT</version>
 
   </parent>
   <dependencies>
   	<dependency>
   		<groupId>com.bstek.ureport</groupId>
   		<artifactId>ureport2-core</artifactId>
-  		<version>2.3.1-SNAPSHOT</version>
+  		<version>2.3.2-SNAPSHOT</version>
 
   	</dependency>
   </dependencies>

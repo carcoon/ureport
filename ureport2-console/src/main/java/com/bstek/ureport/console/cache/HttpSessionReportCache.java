@@ -15,42 +15,95 @@
  ******************************************************************************/
 package com.bstek.ureport.console.cache;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bstek.ureport.cache.CacheObject;
+import com.bstek.ureport.cache.DefaultMemoryReportCache;
 import com.bstek.ureport.cache.ReportCache;
+import com.bstek.ureport.chart.ChartData;
 import com.bstek.ureport.console.RequestHolder;
+import com.bstek.ureport.definition.ReportDefinition;
+import com.itextpdf.text.log.Logger;
+import com.itextpdf.text.log.LoggerFactory;
 
 /**
  * @author Jacky.gao
  * @since 2017年3月8日
  */
 public class HttpSessionReportCache implements ReportCache {
+	protected static Logger logger = LoggerFactory.getLogger(DefaultMemoryReportCache.class);
+
 	private Map<String,ObjectMap> sessionReportMap=new HashMap<String,ObjectMap>();
+	private Map<String,ReportDefinition> reportMap=new ConcurrentHashMap<String,ReportDefinition>();
 	private boolean disabled;
+
 	@Override
-	public Object getObject(String file) {
-		HttpServletRequest req=RequestHolder.getRequest();
-		if(req==null){
-			return null;
+	public ReportDefinition getReportDefinition(String file) {
+		return reportMap.get(file);
+	}
+	@Override
+	public void cacheReportDefinition(String file,ReportDefinition reportDefinition) {
+		if(reportMap.containsKey(file)){
+			reportMap.remove(file);
 		}
-		ObjectMap objMap = getObjectMap(req);
-		return objMap.get(file);
+		reportMap.put(file, reportDefinition);
 	}
 
 	@Override
-	public void storeObject(String file, Object object) {
-		HttpServletRequest req=RequestHolder.getRequest();
-		if(req==null){
-			return;
+	public void removeReportDefinition(String file) {
+		if(reportMap.containsKey(file)){
+			reportMap.remove(file);
 		}
-		ObjectMap map = getObjectMap(req);
-		map.put(file, object);
 	}
+
+	@Override
+	public ChartData getChartData(String chartId) {
+		HttpServletRequest req=RequestHolder.getRequest();
+		ObjectMap objectMap=getObjectMap(req);
+		ChartData chartData=(ChartData)objectMap.get(chartId);
+		return chartData;
+	}
+
+	@Override
+	public void storeChartData(String chartId, ChartData chartData) {
+		HttpServletRequest req=RequestHolder.getRequest();
+		ObjectMap objectMap=getObjectMap(req);
+		objectMap.put(chartId,chartData);
+	}
+
+	@Override
+	public void removeChartData(String chartId) {
+		HttpServletRequest req=RequestHolder.getRequest();
+		ObjectMap objectMap=getObjectMap(req);
+		objectMap.remove(chartId);
+	}
+
+	@Override
+	public void doWatching() {
+		//开启定时器，监控超时缓存清理
+		ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
+		//Executors.newSingleThreadScheduledExecutor();
+		executorService.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				logger.info("run doWatching"+ System.currentTimeMillis());
+				Iterator<Map.Entry<String, ObjectMap>> it = sessionReportMap.entrySet().iterator();
+				while(it.hasNext()){
+					Map.Entry<String, ObjectMap> entry = it.next();
+					if(entry.getValue().isExpired()){
+						logger.info(entry.getKey()+" removed ");
+						it.remove();
+					}
+				}
+
+			}
+		}, 10000, 5000, TimeUnit.MILLISECONDS);
+	}
+
+
 	
 	@Override
 	public boolean disabled() {

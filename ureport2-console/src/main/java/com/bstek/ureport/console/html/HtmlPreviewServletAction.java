@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bstek.ureport.build.Dataset;
+import com.bstek.ureport.console.auth.AuthorCheckService;
+import com.itextpdf.text.log.Logger;
+import com.itextpdf.text.log.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -41,7 +44,6 @@ import com.bstek.ureport.cache.CacheUtils;
 import com.bstek.ureport.chart.ChartData;
 import com.bstek.ureport.console.MobileUtils;
 import com.bstek.ureport.console.RenderPageServletAction;
-import com.bstek.ureport.console.cache.TempObjectCache;
 import com.bstek.ureport.console.exception.ReportDesignException;
 import com.bstek.ureport.definition.Paper;
 import com.bstek.ureport.definition.ReportDefinition;
@@ -56,18 +58,49 @@ import com.bstek.ureport.export.html.HtmlProducer;
 import com.bstek.ureport.export.html.HtmlReport;
 import com.bstek.ureport.export.html.SearchFormData;
 import com.bstek.ureport.model.Report;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
 /**
  * @author Jacky.gao
  * @since 2017年2月15日
  */
 public class HtmlPreviewServletAction extends RenderPageServletAction {
+	protected static Logger logger = LoggerFactory.getLogger(HtmlPreviewServletAction.class);
+
 	private ExportManager exportManager;
 	private ReportBuilder reportBuilder;
 	private ReportRender reportRender;
 	private HtmlProducer htmlProducer=new HtmlProducer();
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			AuthorCheckService authorCheckService = applicationContext.getBean(AuthorCheckService.class);
+			if(authorCheckService!=null){
+				if(!authorCheckService.authorValidate(req)){
+					//没有权限
+					VelocityContext context = new VelocityContext();
+
+					String title=buildTitle(req);
+					context.put("title", title);
+					context.put("content", "<div style='color:red'><strong>报表打开出错，错误信息如下：</strong><br><div style=\"margin:10px\">当前用户没有报表查看权限</div></div>");
+					context.put("error", true);
+					context.put("searchFormJs", "");
+					context.put("downSearchFormHtml", "");
+					context.put("upSearchFormHtml", "");
+					context.put("contextPath", req.getContextPath());
+					resp.setContentType("text/html");
+					resp.setCharacterEncoding("utf-8");
+					Template template=ve.getTemplate("ureport-html/html-preview.html","utf-8");
+					PrintWriter writer=resp.getWriter();
+					template.merge(context, writer);
+					writer.close();
+					return;
+				}
+			}
+		}catch (NoSuchBeanDefinitionException e){
+			logger.info("没有定义AuthorCheckService实现");
+		}
+
 		String method=retriveMethod(req);
 		if(method!=null){
 			invokeMethod(method, req, resp);
@@ -206,7 +239,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		Map<String, Object> parameters = buildParameters(req);
 		ReportDefinition reportDefinition=null;
 		if(file.equals(PREVIEW_KEY)){
-			reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+			reportDefinition=CacheUtils.getReportDefinition(PREVIEW_KEY);
 			if(reportDefinition==null){
 				throw new ReportDesignException("Report data has expired,can not do export excel.");
 			}
@@ -227,7 +260,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		Map<String, Object> parameters = buildParameters(req);
 		ReportDefinition reportDefinition=null;
 		if(file.equals(PREVIEW_KEY)){
-			reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+			reportDefinition=CacheUtils.getReportDefinition(PREVIEW_KEY);
 			if(reportDefinition==null){
 				throw new ReportDesignException("Report data has expired,can not do export excel.");
 			}
@@ -280,7 +313,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 		}
 		ReportDefinition report=null;
 		if(file.equals(PREVIEW_KEY)){
-			report=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);	
+			report=CacheUtils.getReportDefinition(PREVIEW_KEY);
 			if(report==null){
 				throw new ReportDesignException("Report data has expired.");
 			}
@@ -301,7 +334,7 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 			throw new ReportComputeException("Report file can not be null.");
 		}
 		if(file.equals(PREVIEW_KEY)){
-			ReportDefinition reportDefinition=(ReportDefinition)TempObjectCache.getObject(PREVIEW_KEY);
+			ReportDefinition reportDefinition=CacheUtils.getReportDefinition(PREVIEW_KEY);
 			if(reportDefinition==null){
 				throw new ReportDesignException("Report data has expired,can not do preview.");
 			}

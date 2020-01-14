@@ -29,17 +29,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bstek.ureport.console.cache.CacheMessageService;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
 import com.bstek.ureport.cache.CacheUtils;
 import com.bstek.ureport.console.RenderPageServletAction;
-import com.bstek.ureport.console.cache.TempObjectCache;
 import com.bstek.ureport.console.exception.ReportDesignException;
 import com.bstek.ureport.definition.ReportDefinition;
 import com.bstek.ureport.dsl.ReportParserLexer;
@@ -126,7 +127,16 @@ public class DesignerServletAction extends RenderPageServletAction {
 		ReportDefinition reportDef=reportParser.parse(inputStream,"p");
 		reportRender.rebuildReportDefinition(reportDef);
 		IOUtils.closeQuietly(inputStream);
-		TempObjectCache.putObject(PREVIEW_KEY, reportDef);
+		CacheUtils.cacheReportDefinition(PREVIEW_KEY, reportDef);
+		try {
+			CacheMessageService cacheMessageService = applicationContext.getBean(CacheMessageService.class);
+			if (cacheMessageService != null) {
+				//分布式系统，或微服务中，借用mq进行本地消息的同步。
+				cacheMessageService.saveReportCache("p", content);
+			}
+		}catch (NoSuchBeanDefinitionException e){
+
+		}
 	}
 
 	/**
@@ -142,10 +152,9 @@ public class DesignerServletAction extends RenderPageServletAction {
 			throw new ReportDesignException("Report file can not be null.");
 		}
 		file=ReportUtils.decodeFileName(file);
-		Object obj=TempObjectCache.getObject(file);
-		if(obj!=null && obj instanceof ReportDefinition){
-			ReportDefinition reportDef=(ReportDefinition)obj;
-			TempObjectCache.removeObject(file);
+		ReportDefinition obj=CacheUtils.getReportDefinition(file);
+		if(obj!=null){
+			ReportDefinition reportDef=obj;
 			writeObjectToJson(resp, new ReportDefinitionWrapper(reportDef));
 		}else{
 			ReportDefinition reportDef=reportRender.parseReport(file);
@@ -176,6 +185,16 @@ public class DesignerServletAction extends RenderPageServletAction {
 			throw new ReportDesignException("File ["+file+"] not found available report provider.");
 		}
 		targetReportProvider.deleteReport(file);
+		CacheUtils.removeReportDefinition(file);
+		try {
+			CacheMessageService cacheMessageService = applicationContext.getBean(CacheMessageService.class);
+			if (cacheMessageService != null) {
+				//分布式系统，或微服务中，借用mq进行本地消息的同步。
+				cacheMessageService.deleteReportCache(file);
+			}
+		}catch (NoSuchBeanDefinitionException e){
+
+		}
 	}
 	/**
 	 * 下载报表
@@ -232,6 +251,17 @@ public class DesignerServletAction extends RenderPageServletAction {
 		reportRender.rebuildReportDefinition(reportDef);
 		CacheUtils.cacheReportDefinition(file, reportDef);
 		IOUtils.closeQuietly(inputStream);
+		try{
+			CacheMessageService cacheMessageService = applicationContext.getBean(CacheMessageService.class);
+			if(cacheMessageService!=null){
+				//分布式系统，或微服务中，借用mq进行本地消息的同步。
+				cacheMessageService.saveReportCache(file,content);
+
+			}
+		}catch (NoSuchBeanDefinitionException e){
+
+		}
+
 	}
 
 	/**

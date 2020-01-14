@@ -16,12 +16,23 @@
 package com.bstek.ureport.cache;
 
 
+import com.bstek.ureport.chart.ChartData;
+import com.bstek.ureport.definition.ReportDefinition;
+
+import java.util.Map;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月8日
  */
 public interface ReportCache {
-	Object getObject(String file);
-	void storeObject(String file,Object obj);
+	ReportDefinition getReportDefinition(String file);
+	void cacheReportDefinition(String file,ReportDefinition reportDefinition);
+	void removeReportDefinition(String file);
+	ChartData getChartData(String chartId);
+	void storeChartData(String chartId, ChartData chartData);
+	void removeChartData(String chartId);
+	void doWatching();
+
 	boolean disabled();
 }
