@@ -1,4 +1,4 @@
-package com.hcharger.report.provider;
+package com.bstek.ureport.report.provider;
 
 import com.bstek.ureport.definition.datasource.BuildinDatasource;
 import org.springframework.beans.factory.annotation.Autowired;

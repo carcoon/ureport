@@ -1,4 +1,4 @@
-package com.hcharger.report.provider;
+package com.bstek.ureport.report.provider;
 
 import com.bstek.ureport.provider.report.ReportFile;
 import com.bstek.ureport.provider.report.ReportProvider;
