@@ -88,7 +88,7 @@
         ip += ':8111'
     }
     document.querySelector("#btnload").onclick = function(){
-        let url = `http://${ip}/report/getReportPageList?page=0&size=100`
+        let url = `http://${ip}/report/getReportPageList?keyword=&page=0&size=100`
         fetch(url).then(res => res.json())
         .then(json => {
             console.log(json);
