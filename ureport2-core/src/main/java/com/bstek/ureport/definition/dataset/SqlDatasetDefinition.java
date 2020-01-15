@@ -65,15 +65,18 @@ public class SqlDatasetDefinition implements DatasetDefinition {
 				sqlForUse=sqlForUse.replace(substr, result);
 			}
 		}
+		long beginTime=System.currentTimeMillis();
 		Utils.logToConsole("RUNTIME SQL:"+sqlForUse);
 		Map<String, Object> pmap = buildParameters(parameterMap);
 		if(ProcedureUtils.isProcedure(sqlForUse)){
 			List<Map<String,Object>> result = ProcedureUtils.procedureQuery(sqlForUse,pmap,conn);
+			Utils.logToConsole("SQL runtime:"+(System.currentTimeMillis()-beginTime));
 			return new Dataset(name,result,usedInForm,usedInBody);
 		}
 		SingleConnectionDataSource datasource=new SingleConnectionDataSource(conn,false);
 		NamedParameterJdbcTemplate jdbcTemplate=new NamedParameterJdbcTemplate(datasource);
 		List<Map<String,Object>> list= jdbcTemplate.queryForList(sqlForUse, pmap);
+		Utils.logToConsole("SQL runtime:"+(System.currentTimeMillis()-beginTime));
 		return new Dataset(name,list,usedInForm,usedInBody);
 	}
 	
