@@ -74,8 +74,8 @@ public class DatasourceParser implements Parser<DatasourceDefinition> {
 			}
 			Element ele=(Element)obj;
 			String type=ele.attributeValue("type");
-			String usedInForm=ele.attributeValue("used-in-form");
-			String usedInBody = ele.attributeValue("used-in-body");
+			String usedInForm=ele.attributeValue("used-in-form","true");
+			String usedInBody = ele.attributeValue("used-in-body","true");
 			if(type.equals("sql")){
 				SqlDatasetDefinition dataset=new SqlDatasetDefinition();
 				dataset.setName(ele.attributeValue("name"));

@@ -39,6 +39,7 @@ public class DefaultMemoryReportCache implements ReportCache {
 	private Map<String,ReportDefinition> reportMap=new ConcurrentHashMap<String,ReportDefinition>();
 	private Map<String, CacheObject> cacheObjectMap = new ConcurrentHashMap<String,CacheObject>();
 
+
 	@Override
 	public ChartData getChartData(String chartId) {
 		CacheObject<ChartData> cacheObject=cacheObjectMap.get(chartId);
@@ -94,6 +95,11 @@ public class DefaultMemoryReportCache implements ReportCache {
 
 	@Override
 	public boolean disabled() {
+		return false;
+	}
+
+	@Override
+	public boolean disabledReportDefinition() {
 		return false;
 	}
 

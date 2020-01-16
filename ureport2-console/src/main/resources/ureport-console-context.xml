@@ -49,5 +49,6 @@
 	
 	<bean id="ureport.httpSessionReportCache" class="com.bstek.ureport.console.cache.HttpSessionReportCache">
 		<property name="disabled" value="${ureport.disableHttpSessionReportCache}"></property>
+		<property name="disabledReportDefinition" value="${ureport.disableReportDefinitionCache}"></property>
 	</bean>
 </beans>

@@ -79,8 +79,8 @@ public class CacheUtils implements ApplicationContextAware{
 				break;
 			}
 		}
-		if(reportCache==null){
-			reportCache=new DefaultMemoryReportCache();
+		if(reportCache!=null){
+			reportCache.doWatching();
 		}
 	}
 }

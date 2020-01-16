@@ -35,4 +35,5 @@ public interface ReportCache {
 	void doWatching();
 
 	boolean disabled();
+	boolean disabledReportDefinition();
 }

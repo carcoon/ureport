@@ -20,6 +20,7 @@ import java.util.concurrent.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bstek.ureport.Utils;
 import com.bstek.ureport.cache.CacheObject;
 import com.bstek.ureport.cache.DefaultMemoryReportCache;
 import com.bstek.ureport.cache.ReportCache;
@@ -29,23 +30,39 @@ import com.bstek.ureport.definition.ReportDefinition;
 import com.itextpdf.text.log.Logger;
 import com.itextpdf.text.log.LoggerFactory;
 
+import static com.bstek.ureport.console.ServletAction.PREVIEW_KEY;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月8日
  */
 public class HttpSessionReportCache implements ReportCache {
-	protected static Logger logger = LoggerFactory.getLogger(DefaultMemoryReportCache.class);
+	protected static Logger logger = LoggerFactory.getLogger(HttpSessionReportCache.class);
 
 	private Map<String,ObjectMap> sessionReportMap=new HashMap<String,ObjectMap>();
 	private Map<String,ReportDefinition> reportMap=new ConcurrentHashMap<String,ReportDefinition>();
 	private boolean disabled;
+	private boolean disabledReportDefinition;
+
+	public boolean isTempFile(String file) {
+		if("classpath:template/template.ureport.xml".equals(file) || "p".equals(file)){
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public ReportDefinition getReportDefinition(String file) {
+		if(disabledReportDefinition &&!isTempFile(file)){
+			return null;
+		}
 		return reportMap.get(file);
 	}
 	@Override
 	public void cacheReportDefinition(String file,ReportDefinition reportDefinition) {
+		if(disabledReportDefinition &&!isTempFile(file)){
+			return;
+		}
 		if(reportMap.containsKey(file)){
 			reportMap.remove(file);
 		}
@@ -54,6 +71,9 @@ public class HttpSessionReportCache implements ReportCache {
 
 	@Override
 	public void removeReportDefinition(String file) {
+		if(disabledReportDefinition&&!isTempFile(file)){
+			return;
+		}
 		if(reportMap.containsKey(file)){
 			reportMap.remove(file);
 		}
@@ -89,18 +109,18 @@ public class HttpSessionReportCache implements ReportCache {
 		executorService.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				logger.info("run doWatching"+ System.currentTimeMillis());
+				Utils.logToConsole("run doWatching"+ System.currentTimeMillis());
 				Iterator<Map.Entry<String, ObjectMap>> it = sessionReportMap.entrySet().iterator();
 				while(it.hasNext()){
 					Map.Entry<String, ObjectMap> entry = it.next();
 					if(entry.getValue().isExpired()){
-						logger.info(entry.getKey()+" removed ");
+						Utils.logToConsole(entry.getKey()+" removed ");
 						it.remove();
 					}
 				}
 
 			}
-		}, 10000, 5000, TimeUnit.MILLISECONDS);
+		}, 30000, 30000, TimeUnit.MILLISECONDS);
 	}
 
 
@@ -109,9 +129,17 @@ public class HttpSessionReportCache implements ReportCache {
 	public boolean disabled() {
 		return disabled;
 	}
-	
+
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+	@Override
+	public boolean disabledReportDefinition() {
+		return disabledReportDefinition;
+	}
+
+	public void setDisabledReportDefinition(boolean disabledReportDefinition) {
+		this.disabledReportDefinition = disabledReportDefinition;
 	}
 
 	private ObjectMap getObjectMap(HttpServletRequest req) {
