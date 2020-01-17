@@ -43,7 +43,11 @@ public class HttpSessionReportCache implements ReportCache {
 	private Map<String,ReportDefinition> reportMap=new ConcurrentHashMap<String,ReportDefinition>();
 	private boolean disabled;
 	private boolean disabledReportDefinition;
-
+	public ObjectMap getSessionMap(){
+		HttpServletRequest req=RequestHolder.getRequest();
+		ObjectMap objectMap=getObjectMap(req);
+		return  objectMap;
+	}
 	public boolean isTempFile(String file) {
 		if("classpath:template/template.ureport.xml".equals(file) || "p".equals(file)){
 			return true;
@@ -53,13 +57,21 @@ public class HttpSessionReportCache implements ReportCache {
 
 	@Override
 	public ReportDefinition getReportDefinition(String file) {
-		if(disabledReportDefinition &&!isTempFile(file)){
+		if(isTempFile(file)){
+			return (ReportDefinition)getSessionMap().get(file);
+		}
+
+		if(disabledReportDefinition ){
 			return null;
 		}
 		return reportMap.get(file);
 	}
 	@Override
 	public void cacheReportDefinition(String file,ReportDefinition reportDefinition) {
+		if(isTempFile(file)){
+			getSessionMap().put(file,reportDefinition);
+			return;
+		}
 		if(disabledReportDefinition &&!isTempFile(file)){
 			return;
 		}
@@ -71,7 +83,11 @@ public class HttpSessionReportCache implements ReportCache {
 
 	@Override
 	public void removeReportDefinition(String file) {
-		if(disabledReportDefinition&&!isTempFile(file)){
+		if(isTempFile(file)){
+			getSessionMap().remove(file);
+			return;
+		}
+		if(disabledReportDefinition){
 			return;
 		}
 		if(reportMap.containsKey(file)){

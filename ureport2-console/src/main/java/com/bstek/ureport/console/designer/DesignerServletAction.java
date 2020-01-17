@@ -155,6 +155,7 @@ public class DesignerServletAction extends RenderPageServletAction {
 		ReportDefinition obj=CacheUtils.getReportDefinition(file);
 		if(obj!=null){
 			ReportDefinition reportDef=obj;
+			CacheUtils.removeReportDefinition(file);
 			writeObjectToJson(resp, new ReportDefinitionWrapper(reportDef));
 		}else{
 			ReportDefinition reportDef=reportRender.parseReport(file);
