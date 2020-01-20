@@ -368,7 +368,9 @@ public class HtmlPreviewServletAction extends RenderPageServletAction {
 			htmlReport.setContent(html);
 			htmlReport.setTotalPage(report.getPages().size());
 			htmlReport.setStyle(reportDefinition.getStyle());
-			htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(),parameters));
+			if(type==Dataset.DATASET_TYPE_ALL) {
+				htmlReport.setSearchFormData(reportDefinition.buildSearchFormData(report.getContext().getDatasetMap(), parameters));
+			}
 			htmlReport.setReportAlign(report.getPaper().getHtmlReportAlign().name());
 			htmlReport.setHtmlIntervalRefreshValue(report.getPaper().getHtmlIntervalRefreshValue());
 		}else{
