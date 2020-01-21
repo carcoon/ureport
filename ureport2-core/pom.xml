@@ -102,7 +102,7 @@
 	</developers>
 	<scm>
 		<connection>scm:git:https://github.com/carcoon/ureport.git</connection>
-		<developerConnection>scm:git:git@github.com/carcoon/ureport.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/carcoon/ureport.git</developerConnection>
 		<url>https://github.com/carcoon/ureport</url>
     <tag>ureport2-parent-2.3.2</tag>
   </scm>
@@ -111,5 +111,5 @@
 		<url>http://www.bstek.com</url>
 	</organization>	
 	<name>UReport2 Core Project</name>
-	<url>https://github.com/youseries/ureport/tree/master/ureport2-core</url>
+	<url>https://github.com/carcoon/ureport/tree/master/ureport2-core</url>
 </project>
