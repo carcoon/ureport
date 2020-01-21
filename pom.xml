@@ -37,7 +37,7 @@
         <module>ureport2-font</module>
         <module>ureport2-js</module>
         <module>ureport2-console</module>
-        <module>ureport2-demo</module>
+        <!--<module>ureport2-demo</module>-->
     </modules>
 	<build>
 		<resources>
