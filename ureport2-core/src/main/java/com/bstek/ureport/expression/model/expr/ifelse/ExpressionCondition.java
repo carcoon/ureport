@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model.expr.ifelse;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.bstek.ureport.build.BindData;
@@ -34,7 +35,7 @@ import com.bstek.ureport.model.Cell;
  * @author Jacky.gao
  * @since 2017年1月16日
  */
-public class ExpressionCondition {
+public class ExpressionCondition implements Serializable {
 	private Expression left;
 	private Op op;
 	private Expression right;

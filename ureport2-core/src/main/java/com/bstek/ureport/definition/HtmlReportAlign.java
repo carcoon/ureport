@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年7月11日
  */
-public enum HtmlReportAlign {
+public enum HtmlReportAlign implements Serializable {
 	left,center,right;
 }

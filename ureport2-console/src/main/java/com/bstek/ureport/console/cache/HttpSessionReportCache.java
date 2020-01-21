@@ -58,7 +58,7 @@ public class HttpSessionReportCache implements ReportCache {
 	@Override
 	public ReportDefinition getReportDefinition(String file) {
 		if(isTempFile(file)){
-			return (ReportDefinition)getSessionMap().get(file);
+			return reportMap.get(file);
 		}
 
 		if(disabledReportDefinition ){
@@ -69,7 +69,7 @@ public class HttpSessionReportCache implements ReportCache {
 	@Override
 	public void cacheReportDefinition(String file,ReportDefinition reportDefinition) {
 		if(isTempFile(file)){
-			getSessionMap().put(file,reportDefinition);
+			reportMap.put(file,reportDefinition);
 			return;
 		}
 		if(disabledReportDefinition &&!isTempFile(file)){
@@ -84,7 +84,7 @@ public class HttpSessionReportCache implements ReportCache {
 	@Override
 	public void removeReportDefinition(String file) {
 		if(isTempFile(file)){
-			getSessionMap().remove(file);
+			reportMap.remove(file);
 			return;
 		}
 		if(disabledReportDefinition){

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -23,7 +24,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @author Jacky.gao
  * @since 2017年3月14日
  */
-public class SlashValue implements Value {
+public class SlashValue implements Value,Serializable {
 	private String svg;
 	private List<Slash> slashes;
 	@JsonIgnore

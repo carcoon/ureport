@@ -17,11 +17,13 @@ package com.bstek.ureport.definition.value;
 
 import com.bstek.ureport.chart.Chart;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年6月9日
  */
-public class ChartValue implements Value {
+public class ChartValue implements Value,Serializable {
 	private Chart chart;
 	@Override
 	public String getValue() {

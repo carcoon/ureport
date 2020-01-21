@@ -15,11 +15,13 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月14日
  */
-public class Slash {
+public class Slash implements Serializable {
 	private int x;
 	private int y;
 	private int degree;

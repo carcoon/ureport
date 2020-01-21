@@ -17,11 +17,13 @@ package com.bstek.ureport.definition.value;
 
 import com.bstek.ureport.expression.model.expr.dataset.DatasetExpression;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年12月21日
  */
-public class DatasetValue extends DatasetExpression implements Value{
+public class DatasetValue extends DatasetExpression implements Value,Serializable {
 	private static final long serialVersionUID = 1892973888854385049L;
 
 	@Override

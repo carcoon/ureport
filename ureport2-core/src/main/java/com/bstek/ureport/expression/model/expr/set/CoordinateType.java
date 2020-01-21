@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model.expr.set;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年4月6日
  */
-public enum CoordinateType {
+public enum CoordinateType implements Serializable {
 	relative,absolute;
 }

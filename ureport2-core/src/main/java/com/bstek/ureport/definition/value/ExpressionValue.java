@@ -18,11 +18,13 @@ package com.bstek.ureport.definition.value;
 import com.bstek.ureport.expression.ExpressionUtils;
 import com.bstek.ureport.expression.model.Expression;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年12月24日
  */
-public class ExpressionValue implements Value{
+public class ExpressionValue implements Value,Serializable {
 	private String text;
 	private Expression expression;
 	public ExpressionValue(String text) {

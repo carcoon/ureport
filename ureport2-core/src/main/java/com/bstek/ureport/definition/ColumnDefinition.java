@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.bstek.ureport.model.Column;
@@ -23,7 +24,7 @@ import com.bstek.ureport.model.Column;
  * @author Jacky.gao
  * @since 2016年11月1日
  */
-public class ColumnDefinition implements Comparable<ColumnDefinition>{
+public class ColumnDefinition implements Comparable<ColumnDefinition>,Serializable{
 	private int columnNumber;
 	private int width;
 	private boolean hide;

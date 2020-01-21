@@ -17,11 +17,13 @@ package com.bstek.ureport.expression.model;
 
 import com.bstek.ureport.exception.ReportParseException;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年11月22日
  */
-public enum Op {
+public enum Op implements Serializable {
 	GreatThen,EqualsGreatThen,LessThen,EqualsLessThen,Equals,NotEquals,In,NotIn,Like;
 	public static Op parse(String op){
 		op=op.trim();

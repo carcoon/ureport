@@ -15,12 +15,14 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
+
 /**
  * 普通字符串，或者是表达式
  * @author Jacky.gao
  * @since 2016年11月1日
  */
-public class SimpleValue implements Value{
+public class SimpleValue implements Value,Serializable{
 	private String value;
 	public SimpleValue(String value) {
 		this.value=value;

@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.datasource;
 
+import java.io.Serializable;
 import java.sql.Connection;
 
 /**
  * @author Jacky.gao
  * @since 2017年2月9日
  */
-public interface BuildinDatasource {
+public interface BuildinDatasource extends  Serializable {
 	/**
 	 * @return 返回数据源名称
 	 */

@@ -19,11 +19,13 @@ import com.bstek.ureport.exception.ReportComputeException;
 import com.bstek.ureport.expression.model.Operator;
 import com.bstek.ureport.utils.ArithUtils;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年4月25日
  */
-public class ElUnit {
+public class ElUnit implements Serializable {
 	private Object left;
 	private Object right;
 	private Operator op;

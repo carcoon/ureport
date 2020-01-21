@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年6月19日
  */
-public enum PagingPosition {
+public enum PagingPosition implements Serializable {
 	before,after;
 }

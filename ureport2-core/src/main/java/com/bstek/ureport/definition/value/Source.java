@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月6日
  */
-public enum Source {
+public enum Source implements Serializable {
 	text,expression;
 }

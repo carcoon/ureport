@@ -17,11 +17,13 @@ package com.bstek.ureport.expression.model;
 
 import com.bstek.ureport.exception.ReportParseException;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年11月18日
  */
-public enum Operator {
+public enum Operator implements Serializable {
 	Add,Subtract,Multiply,Divide,Complementation;
 	public static Operator parse(String op){
 		if(op.equals("+")){

@@ -14,11 +14,14 @@
  * the License.
  ******************************************************************************/
 package com.bstek.ureport.definition;
+
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2014年3月31日
  */
-public enum BorderStyle {
+public enum BorderStyle implements Serializable {
 	solid,dashed,doublesolid;
 	public static BorderStyle toBorderStyle(String name){
 		if(name.equals("double")){

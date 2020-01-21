@@ -15,11 +15,13 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年10月23日
  */
-public class Option {
+public class Option implements Serializable {
 	private String label;
 	private String value;
 	public String getLabel() {

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.datasource;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import com.bstek.ureport.exception.ReportComputeException;
  * @author Jacky.gao
  * @since 2016年12月27日
  */
-public enum DataType {
+public enum DataType implements Serializable {
 	Integer,Float,Boolean,String,Date,List;
 	public Object parse(Object obj){
 		if(obj==null)return null;

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import com.bstek.ureport.build.Dataset;
  * @author Jacky.gao
  * @since 2017年10月23日
  */
-public class RenderContext {
+public class RenderContext implements Serializable {
 	private int id=0;
 	private Map<String,Dataset> datasetMap;
 	private Map<String, Object> parameters;

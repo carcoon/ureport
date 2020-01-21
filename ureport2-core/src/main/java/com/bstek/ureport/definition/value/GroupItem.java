@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -25,7 +26,7 @@ import com.bstek.ureport.expression.model.Condition;
  * @author Jacky.gao
  * @since 2017年3月28日
  */
-public class GroupItem {
+public class GroupItem implements Serializable {
 	private String name;
 	@JsonIgnore 
 	private Condition condition;

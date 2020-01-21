@@ -17,11 +17,13 @@ package com.bstek.ureport.definition.dataset;
 
 import com.bstek.ureport.definition.datasource.DataType;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年12月27日
  */
-public class Parameter {
+public class Parameter implements Serializable {
 	private String name;
 	private DataType type;
 	private String defaultValue;

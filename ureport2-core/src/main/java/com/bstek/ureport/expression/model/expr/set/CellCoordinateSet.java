@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model.expr.set;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Jacky.gao
  * @since 2017年4月2日
  */
-public class CellCoordinateSet {
+public class CellCoordinateSet implements Serializable {
 	private List<CellCoordinate> cellCoordinates;
 	
 	public CellCoordinateSet(List<CellCoordinate> cellCoordinates) {

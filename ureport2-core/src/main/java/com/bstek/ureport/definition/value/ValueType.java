@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年2月7日
  */
-public enum ValueType {
+public enum ValueType implements Serializable {
 	simple,expression,dataset,image,chart,slash,zxing;
 }

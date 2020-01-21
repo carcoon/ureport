@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model.expr.ifelse;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.bstek.ureport.build.Context;
@@ -25,7 +26,7 @@ import com.bstek.ureport.model.Cell;
  * @author Jacky.gao
  * @since 2017年1月16日
  */
-public class ExpressionConditionList {
+public class ExpressionConditionList implements Serializable{
 	private List<ExpressionCondition> conditions;
 	private List<Join> joins;
 	public ExpressionConditionList(List<ExpressionCondition> conditions,List<Join> joins) {

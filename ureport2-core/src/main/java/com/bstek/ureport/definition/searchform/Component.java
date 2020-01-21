@@ -15,11 +15,13 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年10月23日
  */
-public interface Component {
+public interface Component extends  Serializable {
 	String toHtml(RenderContext context);
 	String initJs(RenderContext context);
 	String getType();

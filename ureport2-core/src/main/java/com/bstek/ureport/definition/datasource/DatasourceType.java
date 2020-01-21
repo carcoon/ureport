@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.datasource;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年2月8日
  */
-public enum DatasourceType {
+public enum DatasourceType implements Serializable {
 	jdbc,spring,buildin;
 }

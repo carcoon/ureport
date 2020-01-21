@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年11月2日
  */
-public enum Align {
+public enum Align implements Serializable {
 	left,right;
 }

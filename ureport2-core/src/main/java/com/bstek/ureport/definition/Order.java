@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年12月21日
  */
-public enum Order {
+public enum Order implements Serializable {
 	desc,asc,none
 }

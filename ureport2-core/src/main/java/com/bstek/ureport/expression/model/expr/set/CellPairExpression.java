@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model.expr.set;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class CellPairExpression extends BaseExpression {
 	}
 }
 
-class CellName{
+class CellName implements Serializable {
 	private String name;
 	private int number;
 	public CellName(String name, int number) {

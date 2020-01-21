@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.datasource;
 
+import java.io.Serializable;
 import java.sql.Connection;
 
 /**
  * @author Jacky.gao
  * @since 2016年12月27日
  */
-public interface DatasourceProvider {
+public interface DatasourceProvider extends  Serializable {
 	Connection getConnection();
 	String getName();
 }

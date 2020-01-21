@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -26,7 +27,7 @@ import com.bstek.ureport.expression.model.Expression;
  * @author Jacky.gao
  * @since 2017年4月10日
  */
-public class ConditionPropertyItem {
+public class ConditionPropertyItem implements Serializable {
 	private String name;
 	
 	@JsonIgnore 

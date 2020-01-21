@@ -15,13 +15,14 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.searchform;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Jacky.gao
  * @since 2017年10月23日
  */
-public class SearchForm {
+public class SearchForm implements Serializable {
 	private List<Component> components;
 	private FormPosition formPosition;
 	public String toHtml(RenderContext context){

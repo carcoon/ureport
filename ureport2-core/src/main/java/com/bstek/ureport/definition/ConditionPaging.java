@@ -15,11 +15,13 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年6月19日
  */
-public class ConditionPaging {
+public class ConditionPaging implements Serializable {
 	private PagingPosition position;
 	/**
 	 * 当position为after时，line用来指定当前行后多少行进行分页 

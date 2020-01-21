@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.expression.model;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年11月18日
  */
-public enum UnitType {
+public enum UnitType implements Serializable {
 	Single,Location;
 }

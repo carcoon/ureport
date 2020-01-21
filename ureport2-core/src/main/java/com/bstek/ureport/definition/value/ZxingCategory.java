@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.value;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月26日
  */
-public enum ZxingCategory {
+public enum ZxingCategory implements Serializable {
 	barcode,qrcode
 }

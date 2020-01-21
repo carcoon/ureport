@@ -15,11 +15,13 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.mapping;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月29日
  */
-public class MappingItem {
+public class MappingItem implements Serializable {
 	private String value;
 	private String label;
 	public String getValue() {

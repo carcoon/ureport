@@ -17,11 +17,13 @@ package com.bstek.ureport.definition.value;
 
 import com.bstek.ureport.expression.model.Expression;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年3月26日
  */
-public class ZxingValue implements Value {
+public class ZxingValue implements Value ,Serializable {
 	private int width;
 	private int height;
 	private Source source;

@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition.mapping;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年9月13日
  */
-public enum MappingType {
+public enum MappingType implements Serializable {
 	simple,dataset
 }

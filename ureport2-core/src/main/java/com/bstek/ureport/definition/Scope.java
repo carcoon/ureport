@@ -15,10 +15,12 @@
  ******************************************************************************/
 package com.bstek.ureport.definition;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年4月24日
  */
-public enum Scope {
+public enum Scope implements Serializable {
 	cell,row,column
 }

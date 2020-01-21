@@ -17,11 +17,13 @@ package com.bstek.ureport.definition.value;
 
 import com.bstek.ureport.expression.model.Expression;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2017年1月24日
  */
-public class ImageValue implements Value {
+public class ImageValue implements Value ,Serializable {
 	private String path;
 	private String expr;
 	private Expression expression;

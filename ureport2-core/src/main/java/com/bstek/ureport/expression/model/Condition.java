@@ -18,11 +18,13 @@ package com.bstek.ureport.expression.model;
 import com.bstek.ureport.build.Context;
 import com.bstek.ureport.model.Cell;
 
+import java.io.Serializable;
+
 /**
  * @author Jacky.gao
  * @since 2016年11月18日
  */
-public interface Condition {
+public interface Condition extends Serializable {
 	/**
 	 * @param cell 当前Condition所在的单元格
 	 * @param currentCell 当前Condition正在处理的单元格
