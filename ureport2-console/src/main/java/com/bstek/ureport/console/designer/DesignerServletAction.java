@@ -124,7 +124,7 @@ public class DesignerServletAction extends RenderPageServletAction {
 		String content=req.getParameter("content");
 		content=decodeContent(content);
 		InputStream inputStream=IOUtils.toInputStream(content,"utf-8");
-		ReportDefinition reportDef=reportParser.parse(inputStream,"p");
+		ReportDefinition reportDef=reportParser.parse(inputStream,PREVIEW_KEY);
 		reportRender.rebuildReportDefinition(reportDef);
 		IOUtils.closeQuietly(inputStream);
 		CacheUtils.cacheReportDefinition(PREVIEW_KEY, reportDef);
